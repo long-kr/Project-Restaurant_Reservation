@@ -23,14 +23,21 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  const list = reservations.map((reservation) => (
+    <div>
+      <p>{reservation.first_name}</p>
+    </div>
+  ))
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
+      { reservations.length > 0 && <section>{list}</section> }
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      { reservations.length > 0 && JSON.stringify(reservations)}
     </main>
   );
 }
