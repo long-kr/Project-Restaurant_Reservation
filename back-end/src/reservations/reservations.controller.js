@@ -1,33 +1,53 @@
+const service = require("./reservations.service");
+const asyncHandler = require("../errors/asyncErrorBoundary");
 /**
  * List handler for reservation resources
  */
 async function list(req, res) {
+  const date = req.query.date;
+  
   res.json({
-    data: reservations,
+    data: await service.list(date),
   });
 }
 
 /**
+ * validation input data
+ */
+function hasData(propertyName) {
+  return (req, res, next) => {
+    const { data } = req.body;
+
+    if (!data[propertyName]) {
+      return next({ 
+        status: 400,
+        message: `Request must have ${propertyName}`
+      })
+    }
+
+    next();
+  };
+};
+
+
+/**
  * Create handler for creating reservation
  */
-const reservations = []
-let nextId = 1;
 async function create(req, res) {
-  const newReservation = req.body.data;
-
-  const now = new Date().toISOString();
-  newReservation.reservation_id = nextId++;
-  newReservation.created_at = now;
-  newReservation.updated_at = now;
-  reservations.push(newReservation);
-
+  
+  const newReservation = await service.create(req.body.data);
+  
   res.status(201).json({
     data: newReservation
   })
-
 }
 
 module.exports = {
   list,
-  create
+  create: [hasData("first_name"),
+           hasData("last_name"),
+           hasData("mobile_number"),
+           hasData("reservation_date"),
+           hasData("reservation_time"),
+           asyncHandler(create)]
 };

@@ -32,12 +32,14 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
+      <button>Previous</button>
+      <button>Next</button>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      { reservations.length > 0 && <section>{list}</section> }
+      <section>{list}</section> 
       <ErrorAlert error={reservationsError} />
-      { reservations.length > 0 && JSON.stringify(reservations)}
+      {JSON.stringify(reservations)}
     </main>
   );
 }

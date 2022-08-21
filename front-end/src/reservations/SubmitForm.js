@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 export default function SubmitForm({submitHandler, changeHandler, reservation}) {
     const  history = useHistory();
 
+    
     return (
         <div>
              <form onSubmit={submitHandler}>
@@ -42,7 +43,20 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         name="mobile_number"
                         onChange={changeHandler}
                         value={reservation.mobile_number}
-                        placeholder="(xxx)-xxx-xxxx"
+                        placeholder="xxx-xxx-xxxx"
+                        required
+                    />
+                </label>
+                <br />
+                <label htmlFor="people">
+                    People:
+                    <input
+                        id="people"
+                        type="number"
+                        name="people"
+                        onChange={changeHandler}
+                        value={reservation.people}
+                        placeholder="how many guess?"
                         required
                     />
                 </label>

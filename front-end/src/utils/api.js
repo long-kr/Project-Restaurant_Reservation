@@ -63,6 +63,7 @@ export async function listReservations(params, signal) {
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
+  console.log(params)
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -73,12 +74,6 @@ export async function listReservations(params, signal) {
  * @return {Promise<[reservation]}
  *  return a promise with reservation info
  */
-// const reservations = [];
-
-// function nextId() {
-//   const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
-//   return uint32.toString(16);
-// }
 
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;

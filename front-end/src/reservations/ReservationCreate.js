@@ -10,6 +10,7 @@ function ReservationCreate() {
         first_name: "",
         last_name: "",
         mobile_number: "",
+        people: "",
         reservation_date: "",
         reservation_time: ""
     }
@@ -32,7 +33,8 @@ function ReservationCreate() {
     const changeHandler = ({ target }) => {
         setReservation((preInfo) => ({
             ...preInfo,
-            [target.name]: target.value
+            [target.name]: target.value,
+            
         }));
     }
 
@@ -48,5 +50,7 @@ function ReservationCreate() {
         </div>
     );
 }
+
+
 
 export default ReservationCreate;
