@@ -1,11 +1,10 @@
 import React from "react";
-import { today } from "../utils/date-time";
+// import { today } from "../utils/date-time";
 import { useHistory } from "react-router-dom";
 
 export default function SubmitForm({submitHandler, changeHandler, reservation}) {
     const  history = useHistory();
 
-    
     return (
         <div>
              <form onSubmit={submitHandler}>
@@ -44,12 +43,13 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         onChange={changeHandler}
                         value={reservation.mobile_number}
                         placeholder="xxx-xxx-xxxx"
+                        // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         required
                     />
                 </label>
                 <br />
                 <label htmlFor="people">
-                    People:
+                    Number of Guest:
                     <input
                         id="people"
                         type="number"
@@ -57,6 +57,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         onChange={changeHandler}
                         value={reservation.people}
                         placeholder="how many guess?"
+                        min="1"
                         required
                     />
                 </label>
@@ -68,7 +69,9 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         name="reservation_date"
                         onChange={changeHandler}
                         value={reservation.reservation_date}
-                        min={today()}
+                        // min={today()}
+                        placeholder="YYYY-MM-DD"
+                        // pattern="\d{4}-\d{2}-\d{2}"
                         required
                     />
                 </label>
@@ -82,6 +85,8 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         max="22:00" 
                         onChange={changeHandler}
                         value={reservation.reservation_time}
+                        placeholder="HH:MM"
+                        // pattern="[0-9]{2}:[0-9]{2}"
                         required
                     />
                 </label>

@@ -23,10 +23,10 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/reservations/new">
-        <ReservationCreate date ={today()}/>
+        <ReservationCreate date={today()}/>
       </Route>
-      <Route path="/dashboard">
-        <Dashboard date={today()} />
+      <Route path="/dashboard/">
+        <Dashboard todayDate={today()} />
       </Route>
       <Route>
         <NotFound />
