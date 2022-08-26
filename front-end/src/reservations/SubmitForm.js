@@ -81,8 +81,8 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                     <input id="reservation_time" 
                         type="time"     
                         name="reservation_time"
-                        min="09:00" 
-                        max="22:00" 
+                        // min="09:00" 
+                        // max="22:00" 
                         onChange={changeHandler}
                         value={reservation.reservation_time}
                         placeholder="HH:MM"

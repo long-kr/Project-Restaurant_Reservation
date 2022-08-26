@@ -24,9 +24,9 @@ function ReservationCreate() {
     const submitHandler = (e) => {
         e.preventDefault();
         reservation.people = parseInt(reservation.people);
-        const closedDatesCheck = closedDateHandler(reservation.reservation_date);
+        const closedDatesCheck 
+            = timeHandler(reservation.reservation_date, reservation.reservation_time);
         if (!closedDatesCheck) {
-            console.log("28");
             createReservation(reservation)
                 .then(() => {
                     history.push(`/dashboard?date=${reservation.reservation_date}`);
@@ -43,28 +43,45 @@ function ReservationCreate() {
         }));
     }
 
-    const closedDateHandler = (input) => {
+    const timeHandler = (dateInput, timeInput) => {
         const minDate =  today();
-        const weekDay = getWeekDay(input);
-        const data = [];
-    
-        if (input < minDate) {
-            const past = {
+        const weekDay = getWeekDay(dateInput);
+        // Convert time into value
+        const openTime = new Date().setHours(10,30,0);
+        const closedTime = new Date().setHours(21,30,0);
+        const hourInput = Number(timeInput.split(":")[0]);
+        const minusInput = Number(timeInput.split(":")[1]);
+        const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+        const timeNow = new Date().getTime()
+        const errors = [];
+
+        if (dateInput < minDate) {
+            errors.push({
                 message: `reservation_date cannot be a past day.`
-            };
-            data.push(past) 
+            }) 
         }
     
         if (weekDay === 2) {
-            const tues = {
+            errors.push({
                 message: `reservation_date cannot be Tuesday.`
-            };
-            data.push(tues) 
+            }) 
+        }
+
+        if (reserveTime < openTime || reserveTime > closedTime) {
+            errors.push({
+                message: `Reservation time is between 10h30 a.m and 9h30 p.m`
+            })
+        }
+
+        if ( dateInput === minDate && timeNow > reserveTime ) {
+            errors.push({
+                message: `It's passed reservation time!`
+            })
         }
     
-        if(data.length) {
-            setError(data);
-            return data;
+        if(errors.length) {
+            setError(errors);
+            return errors;
         }
     }
 

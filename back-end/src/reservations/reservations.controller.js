@@ -83,12 +83,20 @@ function guestValid(req, res, next) {
   })
 };
 
-function closedDays(req, res, next) {
-  const { reservation_date } = req.body.data;
+function closingDays(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
 
-  // Using moment package to get exact date values
+  // Using moment package
+  // For date
   const dateInput = moment(reservation_date);
   const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0);
+  // For time
+  const hourInput = Number(reservation_time.split(":")[0]);
+  const minusInput = Number(reservation_time.split(":")[1]);
+  const timeNow = new Date().getTime();
+  const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+  const openTime = new Date().setHours(10,30,0);
+  const closedTime = new Date().setHours(21,30,0);
 
   if(dateInput < today) {
     return next({
@@ -104,8 +112,26 @@ function closedDays(req, res, next) {
     })
   }
 
-  next();
+  if (reserveTime < openTime || reserveTime > closedTime) {
+    return next({
+      status: 400,
+      message: `reservation_time is between 10h30 a.m and 9h30 p.m`
+    })
+  }
+
+  if ( dateInput === minDate && timeNow > reserveTime ) {
+    return next({
+      status: 400,
+      message: `It's passed reservation time!`
+    })
+  }
+
+  next({
+    status:400,
+    message: `testing`
+  });
 }
+
 
 /**
  * Create handler for creating reservation
@@ -144,6 +170,6 @@ module.exports = {
            dateValid,
            timeValid,
            guestValid,
-           closedDays,
+           closingDays,
            asyncHandler(create)]
 };
