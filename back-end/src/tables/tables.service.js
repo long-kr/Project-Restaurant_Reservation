@@ -26,13 +26,24 @@ function update(updateTable) {
     return knex(table)
         .where({"table_id": updateTable.table_id})
         .update(updateTable, "*")
-        .then((arr) => arr[0])
+        .then(() => {
+            return knex("reservations")
+                .where({"reservation_id": updateTable.reservation_id})
+                .update({status: "seated"}, "*")
+                .then((arr) => arr[0])
+        })
 };
 
-function destroy(table_id) {
+function destroy(deletedTable) {
     return knex(table)
-        .where({"table_id": table_id})
+        .where({"table_id": deletedTable.table_id})
         .update({"reservation_id": null})
+        .then(() => {
+            return knex("reservations")
+                .where({"reservation_id": deletedTable.reservation_id})
+                .update({status: "finished"}, "*")
+                .then((arr) => arr[0])
+        })
 };
 
 module.exports = {

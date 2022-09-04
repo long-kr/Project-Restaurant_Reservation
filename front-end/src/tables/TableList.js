@@ -8,6 +8,7 @@ function TableList({ table, unSeatingHandler }) {
     
     const finishButtonHandler = () => {
         unSeatingHandler(table_id);
+        console.log("changed reservation status: finished and remove from db")
     };
 
     return (

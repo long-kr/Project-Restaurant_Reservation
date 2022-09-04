@@ -9,9 +9,10 @@ function ReservationList({ reservation }) {
                     Seat
                 </a>
             }
-            <p data-reservation-id-status={reservation.reservation_id}>
+            <p data-reservation-id-status={`${reservation.reservation_id}`}>
                 Status: {reservation.status}
-            </p>
+            </p> 
+            <p>Reservation id: {reservation.reservation_id}</p>
             <p>First Name: {reservation.first_name}</p>
             <p>Last Name: {reservation.last_name}</p>
             <p>Phone: {reservation.mobile_number}</p>
@@ -19,6 +20,7 @@ function ReservationList({ reservation }) {
             <p>Date: {reservation.reservation_date}</p>
             <p>Time: {reservation.reservation_time}</p>
         </div>
+    
     )
 }
 

@@ -135,6 +135,23 @@ export async function unSeatingTable(table_id) {
 };
 
 /**
+ * Send a Put request to assign new status to a reservation
+ * @returns {Promise<[reservation]>}
+ *  a promise with table information.
+ */
+export async function setReservationsStatus(reservation_id, data) {
+  console.log(data)
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+  };
+
+  return await fetchJson(url, options, {});
+}
+
+/**
  * Retrieves all existing table.
  * @returns {Promise<[table]>}
  *  a promise that resolves to a possibly empty array of table saved in the database.

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTable, seatingTable } from "../utils/api";
+import { listTable, seatingTable, setReservationsStatus } from "../utils/api";
 
 /**
  * Route `/reservations/:reservation_id/seat`
@@ -38,17 +38,17 @@ export default function ReservationSeat() {
         setError(null);
         seatingTable(formData.table_id, { reservation_id })
             .then((data) => {
-                console.log(data)
+                console.log(data);
                 history.push("/dashboard")
             })
-            .catch(setError)
+            .catch(setError);
     };
 
     const tableOptions = tables.map((table) => (
         <option key={table.table_id} value={table.table_id}>
             {table.table_name} - {table.capacity}
         </option>
-    ))
+    ));
 
     return (
         <div>

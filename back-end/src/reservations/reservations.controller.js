@@ -12,7 +12,7 @@ async function reservationExist(req, res, next) {
 
   if(!reservation) {
     return next({
-      status: 400,
+      status: 404,
       message: `Cannot find reservartion ID: ${reservation_id}`
     })
   };
@@ -134,6 +134,57 @@ function closingDays(req, res, next) {
   next();
 };
 
+function isSeated(req, res, next) {
+  const { status } = req.body.data;
+  if(status === "seated") {
+    return next({
+      status: 400,
+      message: `Reservation is already seated`
+    })
+  };
+
+  next();
+};
+
+function isFinished(req, res, next) {
+  const { status } = req.body.data;
+  if(status === "finished") {
+    return next({
+      status: 400,
+      message: `Reservation is already finished`
+    })
+  };
+
+  next();
+};
+
+function validStatus(req, res, next) {
+  const { status } = req.body.data;
+  const validStatus = ["booked", "seated", "finished"]
+
+  if(!validStatus.includes(status)) {
+    return next({
+      status: 400,
+      message: `Invalid status input: ${status}`
+    })
+  };
+
+  next();
+};
+
+function validCurrentStatus(req, res, next) {
+  const { status } = res.locals.reservation;
+
+  if(status === "finished") {
+    return next({
+      status: 400,
+      message: `a finished reservation cannot be updated`
+    })
+  }
+
+  next();
+};
+
 /**
  * List handler for reservation resources
  */
@@ -178,6 +229,20 @@ async function create(req, res) {
   })
 };
 
+/**
+ * Update handler for status update 
+ */
+async function update(req, res) {
+  const updateReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+
+  const updated = await service.update(updateReservation);
+
+  res.status(200).json({ data: updated });
+};
+
 module.exports = {
   list,
   create: [
@@ -192,10 +257,18 @@ module.exports = {
     timeValid,
     guestValid,
     closingDays,
+    isSeated,
+    isFinished,
     asyncHandler(create)
   ],
   read: [
     asyncHandler(reservationExist),
     asyncHandler(read),
+  ],
+  update: [
+    asyncHandler(reservationExist),
+    validStatus,
+    validCurrentStatus,
+    asyncHandler(update)
   ]
 };

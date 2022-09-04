@@ -156,6 +156,19 @@ function isTableOcccupied(req, res, next) {
 
     next();
 };
+
+function isReservationSeated(req, res, next) {
+    const { status } = res.locals.reservation;
+
+    if(status === "seated") {
+        return next({
+            status: 400,
+            message: `Reservation is already being seated`
+        })
+    };
+
+    next();
+}
 /**
  * GET handler for table resources
  */
@@ -189,7 +202,7 @@ async function update(req, res) {
         ...req.body.data,
         table_id: res.locals.table.table_id
     }
-
+    console.log(updateTable);
     const updated = await service.update(updateTable);
     res.status(200).json({ data: updated })
 };
@@ -198,7 +211,7 @@ async function update(req, res) {
  * DELETE handler for table resources
  */ 
 async function destroy(req, res) {
-    const deleted = await service.destroy(res.locals.table.table_id);
+    const deleted = await service.destroy(res.locals.table);
     res.status(200).json("deleted");
 };
 
@@ -221,6 +234,7 @@ module.exports = {
         validUpdateProperty,
         maxPeople,
         isTableFree,
+        isReservationSeated,
         asyncHandler(update)
     ],
     delete: [
