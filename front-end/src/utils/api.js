@@ -69,9 +69,9 @@ export async function listReservations(params, signal) {
 }
 
 /**
- * Send post request to create a reservation
- * @return {Promise<[reservation]}
- *  return a promise with reservation info
+ * Send a Post request to create a reservation
+ * @return {Promise<[new reservation]>}
+ *  a promise with new reservation infomation
  */
 
 export async function createReservation(reservation, signal) {
@@ -85,3 +85,74 @@ export async function createReservation(reservation, signal) {
 
   return await fetchJson(url, options, {});
 }
+
+/**
+ * Send a Post request to create a table
+ * @return {Promise<[new table]>}
+ *  a promise with new table infomation
+ */
+export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+
+  return await fetchJson(url, options, {});
+}
+
+
+/**
+ * Send a Put request to assign reservation_id to a table.
+ * @returns {Promise<[table]>}
+ *  a promise with table information.
+ */
+export async function seatingTable(table_id, data) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+  };
+
+  return await fetchJson(url, options, {});
+};
+
+/**
+ * Send a DELETE request to create a table
+ * @return nothing
+ */
+export async function unSeatingTable(table_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+  };
+
+  return await fetchJson(url, options, {});
+};
+
+/**
+ * Retrieves all existing table.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of table saved in the database.
+ */
+export async function listTable(signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    headers,
+    signal
+  };
+
+  return await fetchJson(url, options, {});
+};
+
+
+// const tables = [];
+
+// function nextId() {
+//   const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
+//   return uint32.toString(16);
+// }

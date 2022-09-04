@@ -1,15 +1,15 @@
 /**
- * Defines the router for reservation resources.
+ * Defines the router for table resources.
  *
  * @type {Router}
  */
-
 const router = require("express").Router({ mergeParams: true });
-const controller = require("./reservations.controller");
+const controller = require("./tables.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
-router.route("/:reservation_id")
-    .get(controller.read)
+router.route("/:table_id([0-9]+)/seat")
+    .put(controller.update)
+    .delete(controller.delete)
     .all(methodNotAllowed)
 
 router.route("/")

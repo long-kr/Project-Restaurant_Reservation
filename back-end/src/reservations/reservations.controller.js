@@ -3,19 +3,24 @@ const asyncHandler = require("../errors/asyncErrorBoundary");
 const moment = require('moment');
 
 /**
- * List handler for reservation resources
- */
-async function list(req, res) {
-  const date = req.query.date;
-
-  res.json({
-    data: await service.list(date),
-  });
-}
-
-/**
  * Validation input data
  */
+async function reservationExist(req, res, next) {
+  const { reservation_id } = req.params;
+
+  const reservation = await service.read(reservation_id);
+
+  if(!reservation) {
+    return next({
+      status: 400,
+      message: `Cannot find reservartion ID: ${reservation_id}`
+    })
+  };
+
+  res.locals.reservation = reservation;
+  next();
+};
+
 function hasData(req, res, next) {
   if ( req.body.data ) {
     return next();
@@ -25,9 +30,9 @@ function hasData(req, res, next) {
     status: 400,
     message: `Request body must have data`
   })
-}
+};
 
-function hasValidProperties(propertyName) {
+function hasProperties(propertyName) {
   return (req, res, next) => {
     const { data } = req.body;
 
@@ -53,7 +58,7 @@ function dateValid(req, res, next) {
     status: 400,
     message: `reservation_date must be valid.`
   })
-}
+};
 
 function timeValid(req, res, next) {
   const { reservation_time } = req.body.data;
@@ -68,7 +73,7 @@ function timeValid(req, res, next) {
     status: 400,
     message: `reservation_time must be valid.`
   })
-}
+};
 
 function guestValid(req, res, next) { 
   const { people } = req.body.data;
@@ -110,27 +115,42 @@ function closingDays(req, res, next) {
       status: 400,
       message: `reservation_date closed on Tuesday.`
     })
-  }
+  };
 
   if (reserveTime < openTime || reserveTime > closedTime) {
     return next({
       status: 400,
       message: `reservation_time is between 10h30 a.m and 9h30 p.m`
     })
-  }
+  };
 
-  if ( dateInput === minDate && timeNow > reserveTime ) {
+  if ( dateInput === today && timeNow > reserveTime ) {
     return next({
       status: 400,
       message: `It's passed reservation time!`
     })
   }
 
-  next({
-    status:400,
-    message: `testing`
+  next();
+};
+
+/**
+ * List handler for reservation resources
+ */
+ async function list(req, res) {
+  const date = req.query.date;
+
+  res.json({
+    data: await service.list(date),
   });
 }
+
+/**
+ * Read handler for table resources
+ */
+ async function read(req, res) {
+  res.json({ data: res.locals.reservation });
+};
 
 
 /**
@@ -160,16 +180,22 @@ async function create(req, res) {
 
 module.exports = {
   list,
-  create: [hasData,  
-           hasValidProperties("first_name"),
-           hasValidProperties("last_name"),
-           hasValidProperties("mobile_number"),
-           hasValidProperties("people"),
-           hasValidProperties("reservation_date"),
-           hasValidProperties("reservation_time"),
-           dateValid,
-           timeValid,
-           guestValid,
-           closingDays,
-           asyncHandler(create)]
+  create: [
+    hasData,  
+    hasProperties("first_name"),
+    hasProperties("last_name"),
+    hasProperties("mobile_number"),
+    hasProperties("people"),
+    hasProperties("reservation_date"),
+    hasProperties("reservation_time"),
+    dateValid,
+    timeValid,
+    guestValid,
+    closingDays,
+    asyncHandler(create)
+  ],
+  read: [
+    asyncHandler(reservationExist),
+    asyncHandler(read),
+  ]
 };
