@@ -188,18 +188,30 @@ function validCurrentStatus(req, res, next) {
 /**
  * List handler for reservation resources
  */
- async function list(req, res) {
-  const date = req.query.date;
+async function list(req, res, next) {
+  const { date } = req.query;
+  const { mobile_number } = req.query;
 
-  res.json({
-    data: await service.list(date),
-  });
-}
+  if (date) {
+    res.json({
+      data: await service.list(date),
+    })
+  };
+
+  if (mobile_number) {
+    const reservations = await service.search(mobile_number);
+  
+    res.json({
+      data: reservations,
+    })
+  };
+
+};
 
 /**
  * Read handler for table resources
  */
- async function read(req, res) {
+async function read(req, res) {
   res.json({ data: res.locals.reservation });
 };
 
@@ -244,7 +256,9 @@ async function update(req, res) {
 };
 
 module.exports = {
-  list,
+  list: [
+    asyncHandler(list),
+  ],
   create: [
     hasData,  
     hasProperties("first_name"),

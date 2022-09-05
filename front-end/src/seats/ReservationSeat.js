@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTable, seatingTable, setReservationsStatus } from "../utils/api";
+import { listTable, seatingTable } from "../utils/api";
 
 /**
  * Route `/reservations/:reservation_id/seat`
