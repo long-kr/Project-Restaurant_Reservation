@@ -1,30 +1,20 @@
 import React from "react";
+import TableView from "./TableView";
 
 /**
  * Dashboard <TableList />
  */
-function TableList({ table, unSeatingHandler }) { 
-    const { table_id } = table;
+function TableList({ tables, unSeatingHandler }) { 
     
-    const finishButtonHandler = () => {
-        unSeatingHandler(table_id);
-    };
+    const list = tables.map((table) => (
+        <TableView 
+            key={table.table_id}
+            table={table}
+            finishButtonHandler={unSeatingHandler}
+        />
+    ));
 
-    return (
-        <div>
-            <p data-table-id-status={`${table_id}`}>
-                {table.reservation_id? "Occupied" : "Free"}
-            </p>
-            <p>Table name: {table.table_name}</p>
-            <p>Capacity: {table.capacity}</p>
-            <p>Reservation ID: {table.reservation_id}</p>
-            { table.reservation_id && 
-                <button data-table-id-finish={table.table_id} onClick={finishButtonHandler}>
-                    Finish
-                </button>
-            }
-        </div>
-    )
+    return list
 };
 
 export default TableList;

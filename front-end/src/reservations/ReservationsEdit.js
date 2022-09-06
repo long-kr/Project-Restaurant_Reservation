@@ -5,7 +5,7 @@ import { formatAsDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import SubmitForm from "./SubmitForm";
 
-function EditReservations() {
+function ReservationsEdit() {
     const initialReservation = {
         first_name: "",
         last_name: "",
@@ -48,7 +48,6 @@ function EditReservations() {
         updateReservation(reservation_id, reservation)
             .then(() => {
                 history.push(`/dashboard?date=${reservation.reservation_date}`);
-                console.log("submitted new reservation", reservation)
             })
             .catch((errors) => setError([errors])) 
 
@@ -67,4 +66,4 @@ function EditReservations() {
     )
 };
 
-export default EditReservations;
+export default ReservationsEdit;

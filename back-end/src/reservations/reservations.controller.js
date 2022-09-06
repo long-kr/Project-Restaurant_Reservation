@@ -41,7 +41,7 @@ function hasProperties(propertyName) {
         status: 400,
         message: `Request must have property: ${propertyName}`
       })
-    }
+    };
 
     next();
   };
@@ -52,12 +52,12 @@ function dateValid(req, res, next) {
   
   if (Date.parse(reservation_date) > 0) {
     return next();
-  }
+  };
 
   next({ 
     status: 400,
     message: `reservation_date must be valid.`
-  })
+  });
 };
 
 function timeValid(req, res, next) {
@@ -67,7 +67,7 @@ function timeValid(req, res, next) {
 
   if (hour <= 24 && hour >= 0 && minus <= 60 && minus >= 0) {
     return next();
-  }
+  };
 
   next({ 
     status: 400,
@@ -80,12 +80,12 @@ function guestValid(req, res, next) {
   
   if(typeof(people) == "number" && people > 0) {
     return next()
-  }
+  };
 
   next({
     status: 400,
     message: `people must be a number and greater than 0`
-  })
+  });
 };
 
 function closedDays(req, res, next) {
@@ -129,7 +129,7 @@ function closedDays(req, res, next) {
       status: 400,
       message: `It's passed reservation time!`
     })
-  }
+  };
 
   next();
 };
@@ -245,7 +245,6 @@ async function create(req, res) {
  * Update handler for status update 
  */
 async function update(req, res) {
-  console.log(req.body.data)
   const updateReservation = {
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,

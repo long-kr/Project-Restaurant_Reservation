@@ -62,40 +62,28 @@ function Dashboard({ todayDate }) {
     };
   };
 
-  const list = reservations.map((reservation) => (
-    <ReservationsList
-      key={reservation.reservation_id}
-      reservation={reservation}
-    />
-  ));
-  
-  const listTables = tables.map((table) => (
-    <TableList
-      key={table.table_id}
-      table={table}
-      unSeatingHandler={finishButtonHandler}
-    />
-  ));
-
   return (
     <main>
       <h1>Dashboard</h1>
       <button onClick={previousButtonHandler}>Previous</button>
       <button onClick={todayButtonHandler}>Today</button>
       <button onClick={nextButtonHandler}>Next</button>
-      <button onClick={nextButtonHandler}>Select</button>
+      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      <section>{list}</section>
+      <ReservationsList 
+        reservations={reservations} 
+        setError={setReservationsError}
+      />
+      <TableList
+        tables={tables}
+        unSeatingHandler={finishButtonHandler}
+      />
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>
       </div>
-      <div>{listTables}</div>
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
-      {JSON.stringify(tables)}
-      {JSON.stringify(reservations)}
     </main>
   );
 }

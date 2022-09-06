@@ -4,6 +4,11 @@ import ErrorAlert from "../layout/ErrorAlert";
 import SearchForm from "./SearchForm";
 import ReservationList from "../reservations/ReservationsList";
 
+/**
+ * Defines the Search Page
+ * @input phone number
+ *  return reservations user wants to find
+ */
 function Search() {
     const [phoneNumber, setPhoneNumer] = useState("");
     const [reservations, setReservations] = useState([]);
@@ -25,10 +30,6 @@ function Search() {
             })
             .catch(setError)    
     };
-    
-    const list = reservations.map((reservation) => 
-        <ReservationList key={reservation.reservation_id} reservation={reservation} />
-    );
 
     return (
         <div>
@@ -38,7 +39,10 @@ function Search() {
                 changeHandler={changeHandler}
                 submitHandler={submitHandler}
             />
-            {list}
+            <ReservationList 
+                reservations={reservations}
+                setError={setError}
+            />
         </div>
     )
 };

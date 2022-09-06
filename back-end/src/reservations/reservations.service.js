@@ -1,5 +1,4 @@
 const knex = require("../db/connection");
-
 const table = "reservations";
 
 function list(date) {

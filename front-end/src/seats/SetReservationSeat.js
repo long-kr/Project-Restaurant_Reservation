@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import ErrorAlert from "../layout/ErrorAlert";
 import { listTable, seatingTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 /**
  * Route `/reservations/:reservation_id/seat`
  */
-export default function ReservationSeat() {
+export default function SetReservationSeat() {
     const initialFormState = {
         table_id: ""
     };

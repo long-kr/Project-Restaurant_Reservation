@@ -20,8 +20,23 @@ async function tableExist(req, res, next) {
     next();
 };
 
+async function reservartionExist(req, res, next) {
+    const { reservation_id } = req.body.data;
+    const reservation = await reservartionService.read(reservation_id);
+
+    if(!reservation) {
+        return next({
+            status: 404,
+            message: `Reservation ID cannot be found: ${reservation_id}`
+        })
+    }
+
+    res.locals.reservation = reservation;
+    next();
+};
+
 function hasData(req, res, next) {
-    if( !req.body.data ) {
+    if(!req.body.data) {
         return next({
             status: 400,
             message: `Request body must have data`
@@ -82,21 +97,6 @@ function validReservaionId(req, res, next) {
         })
     };
 
-    next();
-};
-
-async function reservartionExist(req, res, next) {
-    const { reservation_id } = req.body.data;
-    const reservation = await reservartionService.read(reservation_id);
-
-    if(!reservation) {
-        return next({
-            status: 404,
-            message: `Reservation ID cannot be found: ${reservation_id}`
-        })
-    }
-
-    res.locals.reservation = reservation;
     next();
 };
 
@@ -201,8 +201,8 @@ async function update(req, res) {
     const updateTable = {
         ...req.body.data,
         table_id: res.locals.table.table_id
-    }
-    console.log(updateTable);
+    };
+
     const updated = await service.update(updateTable);
     res.status(200).json({ data: updated })
 };
