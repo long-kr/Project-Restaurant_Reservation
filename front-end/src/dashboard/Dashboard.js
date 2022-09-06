@@ -56,7 +56,7 @@ function Dashboard({ todayDate }) {
   function finishButtonHandler(table_id) {
     if(window.confirm("Is this table ready to seat new guests?\nThis cannot be undone.")) {
       setTablesErrors(null);
-      unSeatingTable(table_id, { reservation_id: null })
+      unSeatingTable(table_id)
         .then(() => loadDashboard())
         .catch(setTablesErrors)
     };

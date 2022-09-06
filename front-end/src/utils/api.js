@@ -51,13 +51,12 @@
      return Promise.resolve(onCancel);
    }
  }
- 
+
  /**
   * Retrieves all existing reservation.
   * @returns {Promise<[reservation]>}
   *  a promise that resolves to a possibly empty array of reservation saved in the database.
   */
- 
  export async function listReservations(params, signal) {
    const url = new URL(`${API_BASE_URL}/reservations`);
    Object.entries(params).forEach(([key, value]) =>
@@ -67,13 +66,27 @@
      .then(formatReservationDate)
      .then(formatReservationTime);
  }
- 
+
+ /**
+  * Retrieves an existing reservation.
+  * @returns {Promise<[reservation]>}
+  *  a promise that resolves to a possibly empty array of reservation saved in the database.
+  */
+  export async function getReservation(reservation_id, signal) {
+    const url = `${API_BASE_URL}/reservations/${reservation_id}`
+    const options = {
+      headers,
+      signal
+    };
+  
+    return await fetchJson(url, options, {})
+   };
+
  /**
   * Send a Post request to create a reservation
   * @return {Promise<[new reservation]>}
   *  a promise with new reservation infomation
   */
- 
  export async function createReservation(reservation, signal) {
    const url = `${API_BASE_URL}/reservations`;
    const options = {
@@ -84,24 +97,78 @@
    };
  
    return await fetchJson(url, options, {});
- }
+ };
  
+ /**
+  * Send a Put request to update a reservation
+  * @return {Promise<[new reservation]>}
+  *  a promise with new reservation infomation
+  */
+ export async function updateReservation(reservation_id, data, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal
+  };
+ 
+  return await fetchJson(url, options, {});
+ };
+
+ /**
+  * Retrieves all existing table.
+  * @returns {Promise<[table]>}
+  *  a promise that resolves to a possibly empty array of table saved in the database.
+  */
+  export async function searchReservationsByPhone(params, signal) {
+    const url = new URL(`${API_BASE_URL}/reservations`)
+    const options = {
+      headers,
+      signal
+    };
+  
+    Object.entries(params).forEach(([key, value]) => 
+      url.searchParams.append(key, value.toString())
+    );
+  
+    return await fetchJson(url, options, {});
+  };
+
+ /**
+  * Retrieves all existing table.
+  * @returns {Promise<[table]>}
+  *  a promise that resolves to a possibly empty array of table saved in the database.
+  */
+  export async function setReservationStatus(reservation_id, data, signal) {
+    const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+
+    const options = {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ data }),
+      signal
+    };
+
+    return await fetchJson(url, options, {});
+  }
+
  /**
   * Send a Post request to create a table
   * @return {Promise<[new table]>}
   *  a promise with new table infomation
   */
  export async function createTable(table, signal) {
-   const url = `${API_BASE_URL}/tables`;
-   const options = {
-     method: "POST",
-     headers,
-     body: JSON.stringify({ data: table }),
-     signal,
-   };
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: table }),
+      signal,
+  };
  
    return await fetchJson(url, options, {});
- }
+ };
  
  
  /**
@@ -109,12 +176,13 @@
   * @returns {Promise<[table]>}
   *  a promise with table information.
   */
- export async function seatingTable(table_id, data) {
+ export async function seatingTable(table_id, data, signal) {
    const url = `${API_BASE_URL}/tables/${table_id}/seat`;
    const options = {
      method: "PUT",
      headers,
      body: JSON.stringify({ data }),
+     signal
    };
  
    return await fetchJson(url, options, {});
@@ -124,32 +192,16 @@
   * Send a DELETE request to create a table
   * @return nothing
   */
- export async function unSeatingTable(table_id) {
+ export async function unSeatingTable(table_id, signal) {
    const url = `${API_BASE_URL}/tables/${table_id}/seat`;
    const options = {
      method: "DELETE",
      headers,
+     signal
    };
  
    return await fetchJson(url, options, {});
  };
- 
- // /**
- //  * Send a Put request to assign new status to a reservation
- //  * @returns {Promise<[reservation]>}
- //  *  a promise with table information.
- //  */
- // export async function setReservationsStatus(reservation_id, data) {
- //   console.log(data)
- //   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
- //   const options = {
- //     method: "PUT",
- //     headers,
- //     body: JSON.stringify({ data }),
- //   };
- 
- //   return await fetchJson(url, options, {});
- // }
  
  /**
   * Retrieves all existing table.
@@ -166,28 +218,5 @@
    return await fetchJson(url, options, {});
  };
  
- // function nextId() {
- //   const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
- //   return uint32.toString(16);
- // }
  
- /**
-  * Retrieves all existing table.
-  * @returns {Promise<[table]>}
-  *  a promise that resolves to a possibly empty array of table saved in the database.
-  */
- export async function searchReservationsByPhone(params, signal) {
-   const url = new URL(`${API_BASE_URL}/reservations`)
-   const options = {
-     headers,
-     signal
-   };
- 
-   Object.entries(params).forEach(([key, value]) => 
-     url.searchParams.append(key, value.toString())
-   );
- 
-   console.log(url);
-   return await fetchJson(url, options, {});
- };
  

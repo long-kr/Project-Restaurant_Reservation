@@ -88,7 +88,7 @@ function guestValid(req, res, next) {
   })
 };
 
-function closingDays(req, res, next) {
+function closedDays(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
 
   // Using moment package
@@ -158,9 +158,9 @@ function isFinished(req, res, next) {
   next();
 };
 
-function validStatus(req, res, next) {
+function validUpdateStatus(req, res, next) {
   const { status } = req.body.data;
-  const validStatus = ["booked", "seated", "finished"]
+  const validStatus = ["booked", "seated", "finished", "cancelled"]
 
   if(!validStatus.includes(status)) {
     return next({
@@ -245,6 +245,7 @@ async function create(req, res) {
  * Update handler for status update 
  */
 async function update(req, res) {
+  console.log(req.body.data)
   const updateReservation = {
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,
@@ -270,7 +271,7 @@ module.exports = {
     dateValid,
     timeValid,
     guestValid,
-    closingDays,
+    closedDays,
     isSeated,
     isFinished,
     asyncHandler(create)
@@ -281,7 +282,24 @@ module.exports = {
   ],
   update: [
     asyncHandler(reservationExist),
-    validStatus,
+    hasData,  
+    hasProperties("first_name"),
+    hasProperties("last_name"),
+    hasProperties("mobile_number"),
+    hasProperties("people"),
+    hasProperties("reservation_date"),
+    hasProperties("reservation_time"),
+    dateValid,
+    timeValid,
+    guestValid,
+    closedDays,
+    isSeated,
+    isFinished,
+    asyncHandler(update)
+  ],
+  updateStatus: [
+    asyncHandler(reservationExist),
+    validUpdateStatus,
     validCurrentStatus,
     asyncHandler(update)
   ]
