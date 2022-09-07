@@ -6,6 +6,7 @@ import { formatAsDate } from "../utils/date-time";
  * Reservation View for <ReservationList/>
  */
 function ReservationView({ reservation, cancelHandler }) {
+
     
     return (
         <div className="mb-1 pb-1 border-bottom">
@@ -14,7 +15,7 @@ function ReservationView({ reservation, cancelHandler }) {
                     <a className="mb-2 px-3 btn btn-outline-light"
                         href={`/reservations/${reservation.reservation_id}/seat`}
                     >
-                        Seat
+                        seat
                     </a>
                 }
                 <p data-reservation-id-status={`${reservation.reservation_id}`}>
@@ -29,13 +30,13 @@ function ReservationView({ reservation, cancelHandler }) {
                 <p>Time Reservation: {reservation.reservation_time}</p>
                 <a  className="px-3 mr-3 mb-2 btn btn-outline-light"
                     href={`/reservations/${reservation.reservation_id}/edit`}>
-                    Edit
+                    edit
                 </a>
-                <button className="mb-2 btn btn-outline-light"
-                    data-reservation-id-cancel={reservation.reservation_id}
+                <button data-reservation-id-cancel={reservation.reservation_id}
+                    className="mb-2 btn btn-outline-light"                    
                     onClick={() => cancelHandler(reservation.reservation_id)}
                 >
-                    Cancel
+                    cancel
                 </button>
             </div>
         </div>

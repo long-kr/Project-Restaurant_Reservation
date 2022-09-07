@@ -66,13 +66,13 @@ function Dashboard({ todayDate }) {
     <main>
       <h1>Reservations</h1>
       <button className="mr-2 btn btn-outline-light btn-sm" onClick={previousButtonHandler}>
-        Yesterday
+        Previous day
       </button>
       <button className="mr-2 btn btn-outline-light btn-sm" onClick={todayButtonHandler}>
         Today
       </button>
       <button className="btn btn-outline-light btn-sm" onClick={nextButtonHandler}>
-        Tomorrow
+        Next day
       </button>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
@@ -81,24 +81,25 @@ function Dashboard({ todayDate }) {
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for date: {date}</h4>
           </div>
-          <ReservationsList 
+          { reservations.length && 
+            <ReservationsList 
             reservations={reservations} 
             setError={setReservationsError}
-          />
+            />
+          }
         </div>
         <div alt="tables" className="pt-2 flex bd-highlight">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Tables</h4>
           </div>
-          <TableList
+          { tables.length && 
+            <TableList
             tables={tables}
             unSeatingHandler={finishButtonHandler}
-          />
+            />
+          }
         </div>
       </section>
-      
-      
-      
     </main>
   );
 }
