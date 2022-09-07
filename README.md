@@ -25,3 +25,10 @@
 
 ### Client:
 - This web can be used by restaurant manages to create, update, and set seat for customer's reservations.
+
+| path | summary |
+| ----------- | ----------- |
+| /dashboard  | list of reservations and tables |
+| /search | search reservations by phone number |
+| /reservations/new | create new reservation |
+| /tables/new | create new table | 
