@@ -55,7 +55,7 @@ function ReservationsEdit() {
 
     return (
         <div>
-            <h2>Edit reservation: {reservation_id}</h2>
+            <h4>Editting reservation: ID {reservation_id}</h4>
             <ErrorAlert error={error} />
             <SubmitForm 
                 reservation={reservation}

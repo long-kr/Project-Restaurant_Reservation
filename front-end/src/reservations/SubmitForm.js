@@ -16,7 +16,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                             name="first_name"
                             onChange={changeHandler}
                             value={reservation.first_name}
-                            placeholder="cusomter first name"
+                            placeholder="customer first name"
                             required
                             className="form-control"
                         />
@@ -59,7 +59,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                             name="people"
                             onChange={changeHandler}
                             value={reservation.people}
-                            placeholder="how many guess?"
+                            placeholder="how many guest?"
                             min="1"
                             required
                             className="form-control"

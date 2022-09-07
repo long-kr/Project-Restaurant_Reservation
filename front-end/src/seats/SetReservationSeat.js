@@ -56,20 +56,29 @@ export default function SetReservationSeat() {
             <ErrorAlert error={error} />
             <form onSubmit={submitHandler}>
                 <label htmlFor="table_id">
-                    Choose a Table
+                    <span>Choose a Table: </span>
                     <select
                         id="table_id"
                         name="table_id"
                         onChange={changeHandler}
                         value={formData.table_id}
+                        className="custom-select mb-2"
                     >
                         <option value="">-- Select a table --</option>
                         {tableOptions}
                     </select>
                 </label>
                 <br />
-                <button onClick={() => history.goBack()}>Cancel</button>
-                <button type="submit">Submit</button>
+                <button className="mr-2 my-2 btn btn-outline-light"
+                        onClick={() => history.goBack()}
+                >
+                    Cancel
+                </button>
+                <button className="my-2 btn btn-outline-light" 
+                        type="submit"
+                >
+                    Submit
+                </button>
             </form>
         </div>
     )

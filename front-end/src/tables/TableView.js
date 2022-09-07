@@ -13,6 +13,7 @@ function TableView({ table, finishButtonHandler }) {
             { table.reservation_id && 
                 <button 
                     data-table-id-finish={table.table_id} 
+                    className="btn btn-outline-light"
                     onClick={() => finishButtonHandler(table.table_id)}>
                     Finish
                 </button>
