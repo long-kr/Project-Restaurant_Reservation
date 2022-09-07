@@ -1,4 +1,4 @@
-#Project: Restaurant-reservation-manage-app
+# Project: Restaurant-reservation-manage-app
 
 ## Installation
 1. Fork and clone this repository.
