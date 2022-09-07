@@ -22,3 +22,6 @@
 | POST /tables | send a `POST` request to server to create new table |
 | PUT /tables/table_id/status | send a `PUT` request to assign a `reservation_id` to table and change reseration `status` |
 | DELETE /tables/table_id/status | send a `DELETE` request to remove a `reservation_id` off table and change reservation `status` |
+
+### Client:
+- This web can be used by restaurant manages to create, update, and set seat for customer's reservations.
