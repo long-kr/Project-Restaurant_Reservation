@@ -64,26 +64,41 @@ function Dashboard({ todayDate }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <button onClick={previousButtonHandler}>Previous</button>
-      <button onClick={todayButtonHandler}>Today</button>
-      <button onClick={nextButtonHandler}>Next</button>
+      <h1>Reservations</h1>
+      <button className="mr-2 btn btn-outline-light btn-sm" onClick={previousButtonHandler}>
+        Yesterday
+      </button>
+      <button className="mr-2 btn btn-outline-light btn-sm" onClick={todayButtonHandler}>
+        Today
+      </button>
+      <button className="btn btn-outline-light btn-sm" onClick={nextButtonHandler}>
+        Tomorrow
+      </button>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
-      </div>
-      <ReservationsList 
-        reservations={reservations} 
-        setError={setReservationsError}
-      />
-      <TableList
-        tables={tables}
-        unSeatingHandler={finishButtonHandler}
-      />
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Tables</h4>
-      </div>
+      <section className="d-flex flex-row">
+        <div alt="reservations" className="mr-2 pt-2 flex-grow-1 bd-highlight ">
+          <div className="d-md-flex mb-3">
+            <h4 className="mb-0">Reservations for date: {date}</h4>
+          </div>
+          <ReservationsList 
+            reservations={reservations} 
+            setError={setReservationsError}
+          />
+        </div>
+        <div alt="tables" className="pt-2 flex bd-highlight">
+          <div className="d-md-flex mb-3">
+            <h4 className="mb-0">Tables</h4>
+          </div>
+          <TableList
+            tables={tables}
+            unSeatingHandler={finishButtonHandler}
+          />
+        </div>
+      </section>
+      
+      
+      
     </main>
   );
 }

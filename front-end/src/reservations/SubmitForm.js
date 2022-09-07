@@ -7,61 +7,69 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
     return (
         <div>
              <form onSubmit={submitHandler}>
-                <label htmlFor="first_name">
-                    First Name:
-                    <input
-                        id="first_name"
-                        type="text"
-                        name="first_name"
-                        onChange={changeHandler}
-                        value={reservation.first_name}
-                        placeholder="Your first name"
-                        required
-                    />
-                </label>
+                <div className="form-row">
+                    <label className="col-md-5 mb-3" htmlFor="first_name">
+                        <span>First Name:</span>
+                        <input
+                            id="first_name"
+                            type="text"
+                            name="first_name"
+                            onChange={changeHandler}
+                            value={reservation.first_name}
+                            placeholder="cusomter first name"
+                            required
+                            className="form-control"
+                        />
+                    </label>
+                    <label className="col-md-5 mb-3" htmlFor="last_name">
+                        <span>Last Name:</span>
+                        <input
+                            id="last_name"
+                            type="text"
+                            name="last_name"
+                            onChange={changeHandler}
+                            value={reservation.last_name}
+                            placeholder="customer last name"
+                            required
+                            className="form-control"
+                        />
+                    </label>
+                </div>
                 <br />
-                <label htmlFor="last_name">
-                    Last Name:
-                    <input
-                        id="last_name"
-                        type="text"
-                        name="last_name"
-                        onChange={changeHandler}
-                        value={reservation.last_name}
-                        placeholder="Your last name"
-                        required
-                    />
-                </label>
+                <div className="form-row">
+                    <label className="col-md-5 mb-3" htmlFor="mobile_number">
+                        <span>Mobile Number:</span>
+                        <input
+                            id="mobile_number"
+                            type="tel"
+                            name="mobile_number"
+                            onChange={changeHandler}
+                            value={reservation.mobile_number}
+                            placeholder="xxx-xxx-xxxx"
+                            required
+                            className="form-control"
+                        />
+                    </label>
+                    <br />
+                    <label className="col-md-5 mb-3" htmlFor="people">
+                        <span>Number of Guest:</span>                    
+                        <input
+                            id="people"
+                            type="number"
+                            name="people"
+                            onChange={changeHandler}
+                            value={reservation.people}
+                            placeholder="how many guess?"
+                            min="1"
+                            required
+                            className="form-control"
+                        />
+                    </label>
+                </div>
                 <br />
-                <label htmlFor="mobile_number">
-                    Mobile Number:
-                    <input
-                        id="mobile_number"
-                        type="tel"
-                        name="mobile_number"
-                        onChange={changeHandler}
-                        value={reservation.mobile_number}
-                        placeholder="xxx-xxx-xxxx"
-                        required
-                    />
-                </label>
-                <br />
-                <label htmlFor="people">
-                    Number of Guest:
-                    <input
-                        id="people"
-                        type="number"
-                        name="people"
-                        onChange={changeHandler}
-                        value={reservation.people}
-                        placeholder="how many guess?"
-                        min="1"
-                        required
-                    />
-                </label>
-                <br />
-                <label htmlFor="reservation_date">
-                    Date to reserve:
+                <div className="form-row">
+                <label className="col-md-5 mb-3" htmlFor="reservation_date">
+                    <span>Date to reserve:</span>
                     <input id="reservation_date" 
                         type="date"
                         name="reservation_date"
@@ -69,11 +77,12 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         value={reservation.reservation_date}
                         placeholder="YYYY-MM-DD"
                         required
+                        className="form-control"
                     />
                 </label>
                 <br />
-                <label htmlFor="reservation_time">
-                    Time to reserve:
+                <label className="col-md-5 mb-3" htmlFor="reservation_time">
+                    <span>Time to reserve:</span>                    
                     <input id="reservation_time" 
                         type="time"     
                         name="reservation_time"
@@ -81,11 +90,19 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         value={reservation.reservation_time}
                         placeholder="HH:MM"
                         required
+                        className="form-control"
                     />
                 </label>
+                </div>
                 <br />
-                <button onClick={() => history.goBack()}>Cancel</button>
-                <button type="submit">Submit</button>
+                <button className="my-2 btn btn-outline-light btn-lg" 
+                    onClick={() => history.goBack()}
+                >
+                    Cancel
+                </button>
+                <button className="my-2 ml-3 btn btn-outline-light btn-lg" type="submit">
+                    Submit
+                </button>
             </form>
         </div>
     )

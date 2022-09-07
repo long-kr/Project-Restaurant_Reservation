@@ -87,7 +87,8 @@ function ReservationCreate() {
 
     return (
         <div>
-            <p>Create new reservation</p>
+            <h1>Reservations</h1>
+            <h4>Create new reservation</h4>
             {error && error.map((err, i) => (<ErrorAlert key={i} error={err} />))}
             <SubmitForm 
                 reservation={reservation} 
@@ -106,6 +107,6 @@ function getWeekDay(input) {
     const newDate = new Date(year, month, date);
 
     return newDate.getDay();
-}
+};
 
 export default ReservationCreate;

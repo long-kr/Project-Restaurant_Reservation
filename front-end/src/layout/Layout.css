@@ -1,4 +1,34 @@
 .side-bar {
-  background-color: #393a44;
+  background-color: black;
   min-width: 200px;
+  height:auto;
 }
+
+body {
+  background-image: url("../img/pic3.jpg") ; 
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+}
+
+p {
+  color: honeydew;
+}
+
+span {
+  color: antiquewhite;
+  font-size: larger;
+  
+}
+
+h1 {
+  font-family: 'Prata', serif;
+  color: blanchedalmond;
+}
+
+h4 {
+  font-family: 'Poppins', serif;
+  color: honeydew;
+  text-align: center;
+}
+

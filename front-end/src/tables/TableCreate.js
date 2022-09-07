@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import SubmitNewTable from "./SubmitNewTable";
+import SubmitForm from "./SubmitForm";
 
 
 function TableCreate() {
@@ -35,15 +35,16 @@ function TableCreate() {
 
     return (
         <div>
-            <h2> Create new table</h2>
+            <h1>Reservations</h1>
+            <h4>Create new table</h4>
             <ErrorAlert error={error} />
-            <SubmitNewTable 
+            <SubmitForm 
                 table={table} 
                 submitHandler={submitHandler} 
                 changeHandler={changeHandler} 
             />
         </div>
     )
-}
+};
 
 export default TableCreate;

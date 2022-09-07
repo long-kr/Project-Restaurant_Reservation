@@ -33,7 +33,8 @@ function Search() {
 
     return (
         <div>
-            <h2>Search Page by phone number</h2>
+            <h1>Reservations</h1>
+            <h4>Search reservations by phone</h4>
             <ErrorAlert error={error} />
             <SearchForm phoneNumber={phoneNumber}
                 changeHandler={changeHandler}

@@ -3,9 +3,9 @@ import React from "react";
 function TableView({ table, finishButtonHandler }) {
 
     return (
-        <div>
+        <div className="p-2 mb-2 rounded border border-secondary">
             <p data-table-id-status={`${table.table_id}`}>
-                {table.reservation_id? "Occupied" : "Free"}
+                Status: {table.reservation_id? "Occupied" : "Free"}
             </p>
             <p>Table Name: {table.table_name}</p>
             <p>Capacity: {table.capacity}</p>

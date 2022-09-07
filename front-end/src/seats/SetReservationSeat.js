@@ -52,7 +52,7 @@ export default function SetReservationSeat() {
 
     return (
         <div>
-            <h2>Seat for reservation: {reservation_id}</h2>
+            <h4>Seating for reservation: {reservation_id}</h4>
             <ErrorAlert error={error} />
             <form onSubmit={submitHandler}>
                 <label htmlFor="table_id">
