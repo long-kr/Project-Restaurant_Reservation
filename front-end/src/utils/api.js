@@ -153,6 +153,21 @@
     return await fetchJson(url, options, {});
   }
 
+/**
+  * Retrieves all existing table.
+  * @returns {Promise<[table]>}
+  *  a promise that resolves to a possibly empty array of table saved in the database.
+  */
+ export async function listTable(signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    headers,
+    signal
+  };
+
+  return await fetchJson(url, options, {});
+};
+
  /**
   * Send a Post request to create a table
   * @return {Promise<[new table]>}
@@ -196,21 +211,6 @@
    const url = `${API_BASE_URL}/tables/${table_id}/seat`;
    const options = {
      method: "DELETE",
-     headers,
-     signal
-   };
- 
-   return await fetchJson(url, options, {});
- };
- 
- /**
-  * Retrieves all existing table.
-  * @returns {Promise<[table]>}
-  *  a promise that resolves to a possibly empty array of table saved in the database.
-  */
- export async function listTable(signal) {
-   const url = `${API_BASE_URL}/tables`;
-   const options = {
      headers,
      signal
    };

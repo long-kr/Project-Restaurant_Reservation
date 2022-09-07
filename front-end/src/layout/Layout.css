@@ -1,14 +1,12 @@
 .side-bar {
   background-color: black;
   min-width: 200px;
-  height:auto;
 }
 
 body {
   background-image: url("../img/pic3.jpg") ; 
   background-attachment: fixed;
   background-size: cover;
-  height: 100vh;
 }
 
 p {
@@ -18,7 +16,6 @@ p {
 span {
   color: antiquewhite;
   font-size: larger;
-  
 }
 
 h1 {
@@ -31,4 +28,5 @@ h4 {
   color: honeydew;
   text-align: center;
 }
+
 
