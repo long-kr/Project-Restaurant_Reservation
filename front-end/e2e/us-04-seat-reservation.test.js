@@ -20,7 +20,7 @@ describe("US-04 - Seat reservation - E2E", () => {
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
     setDefaultOptions({ timeout: 1000 });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({headless: false});
   });
 
   afterAll(async () => {
@@ -196,7 +196,7 @@ describe("US-04 - Seat reservation - E2E", () => {
 
       expect(page.url()).toContain("/dashboard");
       expect(page).toMatch(/occupied/i);
-    }, 15000);
+    });
 
     test("cannot seat reservation at Bar #1", async () => {
         await page.waitForSelector('option:not([value=""])');
