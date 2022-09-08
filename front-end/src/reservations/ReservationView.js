@@ -11,8 +11,8 @@ function ReservationView({ reservation, cancelHandler }) {
         <div className="mb-1 pb-1 border-bottom">
             <div>  
                 { reservation.status === "booked" &&
-                    <a className="mb-2 px-3 btn btn-outline-light"
-                        href={`/reservations/${reservation.reservation_id}/seat`}
+                    <a href={`/reservations/${reservation.reservation_id}/seat`}
+                        className="mb-2 px-3 btn btn-outline-light"
                     >
                         Seat
                     </a>

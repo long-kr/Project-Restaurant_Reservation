@@ -196,7 +196,7 @@ describe("US-04 - Seat reservation - E2E", () => {
 
       expect(page.url()).toContain("/dashboard");
       expect(page).toMatch(/occupied/i);
-    });
+    }, 15000);
 
     test("cannot seat reservation at Bar #1", async () => {
         await page.waitForSelector('option:not([value=""])');
@@ -270,7 +270,7 @@ describe("US-04 - Seat reservation - E2E", () => {
           .includes("seat");
       }, hrefSelector);
 
-      expect(containsSeat).toBe(true);
+      await expect(containsSeat).toBe(true);
     });
   });
 });
