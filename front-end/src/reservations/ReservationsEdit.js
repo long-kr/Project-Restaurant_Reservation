@@ -43,20 +43,21 @@ function ReservationsEdit() {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        const abortController = new AbortController();
         setError(null);
         reservation.people = parseInt(reservation.people);
-        updateReservation(reservation_id, reservation)
+        updateReservation(reservation_id, reservation, abortController.signal)
             .then(() => {
                 history.push(`/dashboard?date=${reservation.reservation_date}`);
             })
             .catch((errors) => setError([errors])) 
-
+        return () => abortController.abort();
     };
 
     return (
         <div>
             <h4>Editting reservation: ID {reservation_id}</h4>
-            <ErrorAlert error={error} />
+            {error && error.map((err, i) => (<ErrorAlert key={i} error={err} />))}
             <SubmitForm 
                 reservation={reservation}
                 changeHandler={changeHandler}

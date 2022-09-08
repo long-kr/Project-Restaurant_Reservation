@@ -18,11 +18,14 @@ function ReservationList({ reservations, setError }) {
     function cancelHandler(reservation_id) {
         if(window.confirm("Do you want to cancel this reservation?\nThis cannot be undone.")) {
             setError(null);
-            setReservationStatus(reservation_id, { status: "cancelled" })
+            const abortController = new AbortController();
+            setReservationStatus(reservation_id, { status: "cancelled" }, abortController.signal)
                 .then(() => window.location.reload(false))
                 .catch(setError)
-            };
+            return () => abortController.abort();
+        };
     };
+            
 
     return list
 };

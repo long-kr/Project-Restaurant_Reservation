@@ -1,6 +1,6 @@
 const service = require("./tables.service");
 const reservartionService = require("../reservations/reservations.service");
-const asyncHandler = require("../errors/asyncErrorBoundary");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 /**
  * Validation input data
@@ -217,29 +217,29 @@ async function destroy(req, res) {
 
 module.exports = {
     list,
-    read: [ asyncHandler(tableExist), asyncHandler(read) ],
+    read: [ asyncErrorBoundary (tableExist), asyncErrorBoundary (read) ],
     create: [
         hasData,
         hasProperties("table_name"),
         hasProperties("capacity"),
         validTableName,
         validCapacity,
-        asyncHandler(create),
+        asyncErrorBoundary (create),
     ],
     update: [
-        asyncHandler(tableExist),
+        asyncErrorBoundary (tableExist),
         hasData,
         validReservaionId,
-        asyncHandler(reservartionExist),
+        asyncErrorBoundary (reservartionExist),
         validUpdateProperty,
         maxPeople,
         isTableFree,
         isReservationSeated,
-        asyncHandler(update)
+        asyncErrorBoundary (update)
     ],
     delete: [
-        asyncHandler(tableExist),
+        asyncErrorBoundary (tableExist),
         isTableOcccupied,
-        asyncHandler(destroy),
+        asyncErrorBoundary (destroy),
     ]
 };

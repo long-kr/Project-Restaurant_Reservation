@@ -17,13 +17,15 @@ function TableCreate() {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        const abortController = new AbortController();
         setError(null);
         table.capacity = parseInt(table.capacity);
-        createTable(table)
+        createTable(table, abortController.signal)
             .then(() => {
                 history.push("/dashboard");
             })
             .catch(setError);
+        return () => abortController.abort();
     };
 
     const changeHandler = ({ target: { name, value }}) => {

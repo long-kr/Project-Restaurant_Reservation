@@ -1,5 +1,5 @@
 const service = require("./reservations.service");
-const asyncHandler = require("../errors/asyncErrorBoundary");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const moment = require('moment');
 
 /**
@@ -257,7 +257,7 @@ async function update(req, res) {
 
 module.exports = {
   list: [
-    asyncHandler(list),
+    asyncErrorBoundary(list),
   ],
   create: [
     hasData,  
@@ -273,14 +273,14 @@ module.exports = {
     closedDays,
     isSeated,
     isFinished,
-    asyncHandler(create)
+    asyncErrorBoundary(create)
   ],
   read: [
-    asyncHandler(reservationExist),
-    asyncHandler(read),
+    asyncErrorBoundary(reservationExist),
+    asyncErrorBoundary(read),
   ],
   update: [
-    asyncHandler(reservationExist),
+    asyncErrorBoundary(reservationExist),
     hasData,  
     hasProperties("first_name"),
     hasProperties("last_name"),
@@ -294,12 +294,12 @@ module.exports = {
     closedDays,
     isSeated,
     isFinished,
-    asyncHandler(update)
+    asyncErrorBoundary(update)
   ],
   updateStatus: [
-    asyncHandler(reservationExist),
+    asyncErrorBoundary(reservationExist),
     validUpdateStatus,
     validCurrentStatus,
-    asyncHandler(update)
+    asyncErrorBoundary(update)
   ]
 };

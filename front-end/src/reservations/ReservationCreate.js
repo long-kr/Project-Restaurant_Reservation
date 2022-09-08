@@ -5,8 +5,6 @@ import { today } from "../utils/date-time";
 import SubmitForm from "./SubmitForm";
 import ErrorAlert from "../layout/ErrorAlert";
 
-
-
 function ReservationCreate() {
     const initialReservation = {
         first_name: "",
@@ -23,16 +21,18 @@ function ReservationCreate() {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        const abortController = new AbortController();
         reservation.people = parseInt(reservation.people);
         const closedDatesCheck 
             = timeHandler(reservation.reservation_date, reservation.reservation_time);
         if (!closedDatesCheck) {
-            createReservation(reservation)
+            createReservation(reservation, abortController.signal)
                 .then(() => {
                     history.push(`/dashboard?date=${reservation.reservation_date}`);
                     console.log("submitted new reservation", reservation)
                 })
                 .catch((errors) => setError([errors])) 
+            return () => abortController.abort();
         }    
     }
 

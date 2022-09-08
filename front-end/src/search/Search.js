@@ -20,8 +20,9 @@ function Search() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    const abortController = new AbortController();
     setError(null);
-    searchReservationsByPhone({ mobile_number: phoneNumber })
+    searchReservationsByPhone({ mobile_number: phoneNumber }, abortController.signal)
       .then((data) => {
         setReservations(data);
         if (!data.length) {
@@ -29,6 +30,7 @@ function Search() {
         }
       })
       .catch(setError);
+    return () => abortController.abort();
   };
 
   return (
