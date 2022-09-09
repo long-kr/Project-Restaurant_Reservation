@@ -1,4 +1,5 @@
 # Project: Restaurant-reservation-manage-app
+- Live version: https://final-cap-reservations-cliend.vercel.app/dashboard
 
 ## Installation
 1. Fork and clone this repository.
