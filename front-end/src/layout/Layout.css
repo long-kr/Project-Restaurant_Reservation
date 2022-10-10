@@ -6,7 +6,7 @@
 body {
   background-image: url("../img/pic3.jpg") ; 
   background-attachment: fixed;
-  background-size: cover;
+  background-size: auto;
   background-color: black;
 }
 
