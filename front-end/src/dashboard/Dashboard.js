@@ -74,13 +74,13 @@ function Dashboard({ todayDate }) {
       <button className="btn btn-outline-light btn-sm" onClick={nextButtonHandler}>
         Next day
       </button>
+      <div className="d-md-flex mb-3 justify-content-center">
+        <h4 className="mb-0">For Date: {date}</h4>
+      </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       <section className="d-flex flex-row">
-        <div alt="reservations" className="mr-2 pt-2 flex-grow-1 bd-highlight ">
-          <div className="d-md-flex mb-3 justify-content-center align-items-center">
-            <h4 className="mb-0">Reservations for date: {date}</h4>
-          </div>
+        <div alt="reservations" className="mr-2 pt-2 flex-grow-1 bd-highlight">
           { !!reservations.length && 
             <ReservationsList 
               reservations={reservations} 
@@ -89,13 +89,13 @@ function Dashboard({ todayDate }) {
           }
         </div>
         <div alt="tables" className="pt-2 flex bd-highlight">
-          <div className="d-md-flex mb-3">
+          <div className="d-md-flex mb-3 justify-content-center">
             <h4 className="mb-0">Tables</h4>
           </div>
           { !!tables.length && 
             <TableList
-            tables={tables}
-            unSeatingHandler={finishButtonHandler}
+              tables={tables}
+              unSeatingHandler={finishButtonHandler}
             />
           }
         </div>

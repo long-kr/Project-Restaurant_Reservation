@@ -8,6 +8,7 @@ body {
   background-attachment: fixed;
   background-size: cover;
   background-color: black;
+  overflow-y: scroll;
 }
 
 p {
@@ -15,7 +16,7 @@ p {
 }
 
 span {
-  color: rgb(17, 15, 15);
+  color: rgb(161, 177, 23);
   font-size: larger;
 }
 
