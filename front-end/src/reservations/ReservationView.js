@@ -1,7 +1,6 @@
 import React from "react";
 import { formatAsDate } from "../utils/date-time";
 
-
 /**
  * Reservation View for <ReservationList/>
  */

@@ -78,13 +78,13 @@ function Dashboard({ todayDate }) {
       <ErrorAlert error={tablesError} />
       <section className="d-flex flex-row">
         <div alt="reservations" className="mr-2 pt-2 flex-grow-1 bd-highlight ">
-          <div className="d-md-flex mb-3">
+          <div className="d-md-flex mb-3 justify-content-center align-items-center">
             <h4 className="mb-0">Reservations for date: {date}</h4>
           </div>
-          { reservations.length && 
+          { !!reservations.length && 
             <ReservationsList 
-            reservations={reservations} 
-            setError={setReservationsError}
+              reservations={reservations} 
+              setError={setReservationsError}
             />
           }
         </div>
@@ -92,7 +92,7 @@ function Dashboard({ todayDate }) {
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Tables</h4>
           </div>
-          { tables.length && 
+          { !!tables.length && 
             <TableList
             tables={tables}
             unSeatingHandler={finishButtonHandler}

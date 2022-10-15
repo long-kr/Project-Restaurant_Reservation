@@ -4,30 +4,40 @@
 }
 
 body {
-  background-image: url("../img/pic3.jpg") ; 
+  background-image: url("../img/pic2cups.jpg") ; 
   background-attachment: fixed;
-  background-size: auto;
+  background-size: cover;
   background-color: black;
 }
 
 p {
-  color: honeydew;
+  color: rgb(255, 255, 255);
 }
 
 span {
-  color: antiquewhite;
+  color: rgb(17, 15, 15);
   font-size: larger;
 }
 
 h1 {
+  text-align: center;
   font-family: 'Prata', serif;
-  color: blanchedalmond;
+  color: rgb(250, 250, 253);
+  letter-spacing: 1rem;
 }
 
 h4 {
   font-family: 'Poppins', serif;
-  color: honeydew;
+  font-size: 28px;
+  color: rgb(250, 250, 253);
   text-align: center;
+  letter-spacing: 5px;
 }
 
+h5 {
+  font-family: 'Poppins', serif;
+  font-size: 22px;
+  color: rgb(17, 15, 15);
+  text-align: center;
+}
 

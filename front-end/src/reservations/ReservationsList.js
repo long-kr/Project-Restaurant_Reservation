@@ -7,14 +7,6 @@ import { setReservationStatus } from "../utils/api";
  */
 function ReservationList({ reservations, setError }) {
 
-    const list = reservations.map((reservation) => 
-        <ReservationView 
-            key={reservation.reservation_id}
-            reservation={reservation}
-            cancelHandler={cancelHandler}
-        />
-    );
-
     function cancelHandler(reservation_id) {
         if(window.confirm("Do you want to cancel this reservation?\nThis cannot be undone.")) {
             setError(null);
@@ -25,8 +17,15 @@ function ReservationList({ reservations, setError }) {
             return () => abortController.abort();
         };
     };
-            
 
+    const list = reservations.map((reservation) => 
+        <ReservationView 
+            key={reservation.reservation_id}
+            reservation={reservation}
+            cancelHandler={cancelHandler}
+        />
+    );
+    
     return list
 };
 
