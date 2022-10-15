@@ -16,8 +16,8 @@ p {
 }
 
 span {
-  color: rgb(161, 177, 23);
-  font-size: larger;
+  color: rgb(142, 228, 243);
+  font-size: 20px;
 }
 
 h1 {
@@ -37,8 +37,7 @@ h4 {
 
 h5 {
   font-family: 'Poppins', serif;
-  font-size: 22px;
-  color: rgb(17, 15, 15);
+  font-size: 20px;
+  color: rgb(243, 227, 227);
   text-align: center;
 }
-
