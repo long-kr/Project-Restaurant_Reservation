@@ -36,6 +36,8 @@
 | /reservations/:reservation_id/edit | edit an existing reservation |
 | /tables/new | create new table | 
 
+### Photo
+
  ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
  
  - `Previous day` `Today` `Next day` buttons are used to move desire day.
