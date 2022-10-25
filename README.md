@@ -10,7 +10,7 @@
 1. Run `npm install` to install project dependencies.
 1. Run `npm run start:dev` to start your server in development mode.
 
-### API endpoint:
+## API endpoint:
 | Endpoint | return |
 | ----------- | ----------- |
 | GET /reservations?date=yyyy-mm-dd | respone with list of all reservations by `date` |
@@ -24,7 +24,7 @@
 | PUT /tables/table_id/status | send a `PUT` request to assign a `reservation_id` to table and change reseration `status` |
 | DELETE /tables/table_id/status | send a `DELETE` request to remove a `reservation_id` off table and change reservation `status` |
 
-### Client:
+## Client:
 - This web can be used by restaurant manages to create, update, and set seat for customer's reservations.
 
 | path | summary |
@@ -36,7 +36,7 @@
 | /reservations/:reservation_id/edit | edit an existing reservation |
 | /tables/new | create new table | 
 
-### Photo
+## Photo
 
  ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
  
