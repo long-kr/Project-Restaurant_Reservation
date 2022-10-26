@@ -40,11 +40,11 @@
 
  ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
  
- - `Previous day` `Today` `Next day` buttons are used to move desire day.
- - `Seat` button use to assign table.
- - `Cancel` will cancel reservation and remove it from dashboard.
- - You can use `finish` button to free a table.
- - Create new reservation will be restricted if past days, tuesday, or post time. 
- - Reservation time must be between 10h30 a.m and 9h30 p.m.
- - Number of guest must be smaller than table capacity in order to set seat.
- - I didn't add validation for phone number since everyone can use it.
+- `Previous day` `Today` `Next day` buttons are used to move desired day.
+- `Seat` button use to assign table.
+- `Cancel` will cancel the reservation and remove it from the dashboard.
+- You can use the finish button to free a table.
+- Creating new reservations will be restricted if past days, Tuesday, or post time.
+- Reservation time must be between 10h30 a.m and 9h30 p.m.
+- The number of guests must be smaller than the table capacity in order to set seats.
+- I didn't add validation for the phone numbers since everyone can use it.
