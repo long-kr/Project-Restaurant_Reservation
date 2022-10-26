@@ -40,8 +40,8 @@
 
  ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
  
-- `Previous day` `Today` `Next day` buttons are used to move desired day.
-- `Seat` button use to assign table.
+- `Previous day` `Today` `Next day` buttons are used to move to the desired day.
+- `Seat` button is used to assign table.
 - `Cancel` will cancel the reservation and remove it from the dashboard.
 - You can use the `finish` button to free a table.
 - Creating new reservations will be restricted if past days, Tuesday, or post time.
