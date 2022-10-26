@@ -1,4 +1,4 @@
-# Project: Restaurant-reservation-manage-app
+# Project: Reservation Management Web App
 - Live version: https://final-cap-reservations-cliend.vercel.app/dashboard
 
 ## Installation
