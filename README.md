@@ -1,5 +1,5 @@
 # Project: Reservation Management Web App
-- Live version: https://final-cap-reservations-cliend.vercel.app/dashboard
+- Live: `https://final-cap-reservations-cliend.vercel.app/dashboard`
 
 ## Installation
 1. Fork and clone this repository.
