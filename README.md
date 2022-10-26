@@ -43,7 +43,7 @@
 - `Previous day` `Today` `Next day` buttons are used to move desired day.
 - `Seat` button use to assign table.
 - `Cancel` will cancel the reservation and remove it from the dashboard.
-- You can use the finish button to free a table.
+- You can use the `finish` button to free a table.
 - Creating new reservations will be restricted if past days, Tuesday, or post time.
 - Reservation time must be between 10h30 a.m and 9h30 p.m.
 - The number of guests must be smaller than the table capacity in order to set seats.
