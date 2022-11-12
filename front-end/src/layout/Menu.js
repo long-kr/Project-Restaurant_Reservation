@@ -9,38 +9,40 @@ import { Link } from "react-router-dom";
 
 function Menu() {
   return (
-    <nav className="navbar navbar-dark align-items-start p-0">
-      <div className="container-fluid d-flex flex-column p-0">
+    <nav className="position-sticky">
+      <div className="list-group list-group-flush mx-3 mt-4">
         <Link
-          className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+          className="list-group-item list-group-item-action bg-transparent my-1 py-3 ripple"
           to="/"
         >
-          <div className="sidebar-brand-text mx-3">
-            <h5 className="text-darker">Periodic tables</h5>
+          <div className="sidebar-brand-text mx-3" >
+            <h5 className="">Periodic tables</h5>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
+
         <ul className="nav navbar-nav" id="accordionSidebar">
           <li className="nav-item">
-            <Link className="nav-link text-dark" to="/dashboard">
-              <span className="oi oi-dashboard" />
-              &nbsp;Dashboard
+            <Link className="list-group-item list-group-item-action border-0 bg-transparent py-4 ripple" to="/dashboard">
+              <span className="oi oi-dashboard">
+                &nbsp;Dashboard
+              </span>
             </Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link text-dark" to="/search">
+          <li>
+            <Link className="list-group-item list-group-item-action border-right-0 border-left-0 bg-transparent py-4 ripple" to="/search">
               <span className="oi oi-magnifying-glass" />
               &nbsp;Search
             </Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link text-dark" to="/reservations/new">
+          <li>
+            <Link className="list-group-item list-group-item-action border-right-0 border-left-0 bg-transparent py-4 ripple" to="/reservations/new">
               <span className="oi oi-plus" />
               &nbsp;New Reservation
             </Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link text-dark" to="/tables/new">
+          <li>
+            <Link className="list-group-item list-group-item-action border-right-0 border-left-0 bg-transparent py-4 ripple" to="/tables/new">
               <span className="oi oi-layers" />
               &nbsp;New Table
             </Link>

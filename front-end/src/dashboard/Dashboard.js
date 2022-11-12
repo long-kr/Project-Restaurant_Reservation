@@ -64,18 +64,19 @@ function Dashboard({ todayDate }) {
 
   return (
     <main>
-      <h1>Reservations</h1>
-      <button className="mr-2 btn btn-outline-light btn-sm" onClick={previousButtonHandler}>
-        Previous day
-      </button>
-      <button className="mr-2 btn btn-outline-light btn-sm" onClick={todayButtonHandler}>
-        Today
-      </button>
-      <button className="btn btn-outline-light btn-sm" onClick={nextButtonHandler}>
-        Next day
-      </button>
+      <div className="d-flex justify-content-center py-2">
+        <button className="mr-2 btn btn-light" onClick={previousButtonHandler}>
+          Previous day
+        </button>
+        <button className="mr-2 btn btn-light" onClick={todayButtonHandler}>
+          Today
+        </button>
+        <button className="btn btn-light" onClick={nextButtonHandler}>
+          Next day
+        </button>
+      </div>
       <div className="d-md-flex mb-3 justify-content-center">
-        <h4 className="mb-0">For Date: {date}</h4>
+        <h4 className="mb-0 h3">Date: {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />

@@ -37,7 +37,6 @@ function TableCreate() {
 
     return (
         <div>
-            <h1>Reservations</h1>
             <h4>Create new table</h4>
             <ErrorAlert error={error} />
             <SubmitForm 

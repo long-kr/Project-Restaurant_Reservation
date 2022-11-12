@@ -87,7 +87,6 @@ function ReservationCreate() {
 
     return (
         <div>
-            <h1>Reservations</h1>
             <h4>Create new reservation</h4>
             {error && error.map((err, i) => (<ErrorAlert key={i} error={err} />))}
             <SubmitForm 
