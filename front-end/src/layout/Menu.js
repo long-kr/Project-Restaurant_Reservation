@@ -15,8 +15,8 @@ function Menu() {
           className="list-group-item list-group-item-action bg-transparent my-1 py-3 ripple"
           to="/"
         >
-          <div className="sidebar-brand-text mx-3" >
-            <h5 className="">Periodic tables</h5>
+          <div className="sidebar-brand-text" >
+            <h5 className="h4">Periodic tables</h5>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />

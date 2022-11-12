@@ -15,7 +15,7 @@ export default function Header() {
                 aria-expanded="false" 
                 aria-controls="sidebarMenu"
             >
-                <span className="oi oi-menu h3 "/>
+                <span className="oi oi-menu h3"/>
             </a>
             <h1 className="display-3 flex-fill">Reservations</h1>
         </div>

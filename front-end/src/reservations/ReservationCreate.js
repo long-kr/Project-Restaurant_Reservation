@@ -96,7 +96,7 @@ function ReservationCreate() {
             />
         </div>
     );
-}
+};
 
 function getWeekDay(input) {
     const dateArray = input.split("-");

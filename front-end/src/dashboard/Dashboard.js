@@ -66,24 +66,24 @@ function Dashboard({ todayDate }) {
 
   return (
     <main>
+      <div className="d-flex flex-nowrap justify-content-around">
+        <h4 className="mb-0 h3">Date: {date}</h4>
+      </div>
       <div role="group" className="d-flex py-2 btn-group">
-        <button className="btn btn-outline-light" onClick={previousButtonHandler}>
+        <button className="btn btn-dark border-right" onClick={previousButtonHandler}>
           Previous day
         </button>
-        <button className="btn btn-outline-light" onClick={todayButtonHandler}>
+        <button className="btn btn-dark" onClick={todayButtonHandler}>
           Today
         </button>
-        <button className="mr-2 btn btn-outline-light" onClick={nextButtonHandler}>
+        <button className="mr-2 btn btn-dark" onClick={nextButtonHandler}>
           Next day
         </button>
-      </div>
-      <div className="d-md-flex mb-3 justify-content-center">
-        <h4 className="mb-0 h3">Date: {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       <section className="d-flex flex-row">
-        <div alt="reservations" className="mr-2 pt-2 flex-grow-1 bd-highlight">
+        <div alt="reservations" className="pt-2 flex-grow-1 bd-highlight">
           { !!reservations.length && 
             <ReservationsList 
               reservations={reservations} 
@@ -91,16 +91,15 @@ function Dashboard({ todayDate }) {
             />
           }
         </div>
-        <div alt="tables" className="pt-2 flex bd-highlight">
-          <div className="d-md-flex mb-3 justify-content-center">
-            <h4 className="mb-0">Tables</h4>
+        <div id="table" className="carousel slide col-lg-3" data-ride="carousel">
+          <div className="carousel-inner">
+            { !!tables.length && 
+              <TableList
+                tables={tables}
+                unSeatingHandler={finishButtonHandler}
+              />
+            }
           </div>
-          { !!tables.length && 
-            <TableList
-              tables={tables}
-              unSeatingHandler={finishButtonHandler}
-            />
-          }
         </div>
       </section>
     </main>

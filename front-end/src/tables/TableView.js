@@ -5,7 +5,7 @@ function TableView({ table, finishButtonHandler }) {
     return (
         <div>
             <div className="card bg-dark mt-3">
-                <div className="card-header">Name: {table.table_name}</div> 
+                <div style={{fontFamily: "Baskervville"}} className="card-header">Table: {table.table_name}</div> 
             </div>
             <div className="card-body light-background">
                 <p className="card-text" data-table-id-status={`${table.table_id}`}>
@@ -21,6 +21,16 @@ function TableView({ table, finishButtonHandler }) {
                         Finish
                     </button>
                 }
+                <div className="d-flex justify-content-center">
+                    <a className="carousel" role="button" href="#table" data-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Previous</span>
+                    </a>
+                    <a className="carousel" role="button" href="#table" data-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
         </div>
     )

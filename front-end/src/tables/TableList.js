@@ -6,12 +6,14 @@ import TableView from "./TableView";
  */
 function TableList({ tables, unSeatingHandler }) { 
     
-    const list = tables.map((table) => (
-        <TableView 
-            key={table.table_id}
-            table={table}
-            finishButtonHandler={unSeatingHandler}
-        />
+    const list = tables.map((table, i) => (
+        <div className={i===0 ? "carousel-item active":"carousel-item"}>
+            <TableView 
+                key={table.table_id}
+                table={table}
+                finishButtonHandler={unSeatingHandler}
+            />
+        </div>
     ));
 
     return list

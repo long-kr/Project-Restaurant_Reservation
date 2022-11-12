@@ -37,14 +37,16 @@ function SubmitForm({submitHandler, changeHandler, table}) {
                     />
                 </label>
                 <br />
-                <button className="mx-3 my-2 btn btn-outline-light btn-lg" 
-                    onClick={() => history.goBack()}
-                >
-                    Cancel
-                </button>
-                <button className="my-2 mx-2 btn btn-outline-light btn-lg" type="submit">
-                    Submit
-                </button>
+                <div className="btn-group">
+                    <button className="btn btn-dark" 
+                        onClick={() => history.goBack()}
+                    >
+                        Cancel
+                    </button>
+                    <button className="btn btn btn-dark border-left" type="submit">
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     )

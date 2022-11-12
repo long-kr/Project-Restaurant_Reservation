@@ -95,14 +95,16 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                 </label>
                 </div>
                 <br />
-                <button className="my-2 btn btn-outline-light btn-lg" 
-                    onClick={() => history.goBack()}
-                >
-                    Cancel
-                </button>
-                <button className="my-2 ml-3 btn btn-outline-light btn-lg" type="submit">
-                    Submit
-                </button>
+                <div className="btn-group">
+                    <button className="btn btn-dark" 
+                        onClick={() => history.goBack()}
+                    >
+                        Cancel
+                    </button>
+                    <button className="btn btn-dark border-left" type="submit">
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     )
