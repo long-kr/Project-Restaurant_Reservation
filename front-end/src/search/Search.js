@@ -35,8 +35,7 @@ function Search() {
 
   return (
     <div>
-      <h1>Reservations</h1>
-      <h4>Search reservations by phone</h4>
+      <h4 className="h3 text-center">Search Reservations</h4>
       <ErrorAlert error={error} />
       <SearchForm
         phoneNumber={phoneNumber}

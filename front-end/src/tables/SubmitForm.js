@@ -8,7 +8,7 @@ function SubmitForm({submitHandler, changeHandler, table}) {
         <div>
             <form onSubmit={submitHandler}>
                 <label className="col-md-5 mb-3 pl-0" htmlFor="table_name">
-                    <span>Table Name:</span>
+                    <p>Table Name:</p>
                     <input
                         id="table_name"
                         type="text"
@@ -23,7 +23,7 @@ function SubmitForm({submitHandler, changeHandler, table}) {
                 </label>
                 <br />
                 <label className="col-md-5 mb-3 pl-0"htmlFor="capacity">
-                    <span>Capacity:</span>
+                    <p>Capacity:</p>
                     <input
                         id="capacity"
                         type="number"
@@ -37,14 +37,16 @@ function SubmitForm({submitHandler, changeHandler, table}) {
                     />
                 </label>
                 <br />
-                <button className="mx-3 my-2 btn btn-outline-light btn-lg" 
-                    onClick={() => history.goBack()}
-                >
-                    Cancel
-                </button>
-                <button className="my-2 mx-2 btn btn-outline-light btn-lg" type="submit">
-                    Submit
-                </button>
+                <div className="btn-group">
+                    <button className="btn btn-dark" 
+                        onClick={() => history.goBack()}
+                    >
+                        Cancel
+                    </button>
+                    <button className="btn btn btn-dark border-left" type="submit">
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     )

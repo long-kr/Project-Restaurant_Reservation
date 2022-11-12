@@ -3,10 +3,9 @@ import React from "react";
 export default function SearchForm({submitHandler, changeHandler, phoneNumber}) {
     
     return (
-        <div>
+        <div className="">
             <form onSubmit={submitHandler}>
-                <span>Search by phone number</span>
-                <label className="input-group mb-3" htmlFor="mobile_number">
+                <label className="d-flex input-group mb-3 justify-content-center" htmlFor="mobile_number">
                     <div className="input-group-prepend">
                         <button className="my-2 btn btn-outline-light" type="submit">
                             Find

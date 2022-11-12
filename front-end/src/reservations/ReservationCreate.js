@@ -87,8 +87,7 @@ function ReservationCreate() {
 
     return (
         <div>
-            <h1>Reservations</h1>
-            <h4>Create new reservation</h4>
+            <h4 className="h3 text-center">Create New Reservation</h4>
             {error && error.map((err, i) => (<ErrorAlert key={i} error={err} />))}
             <SubmitForm 
                 reservation={reservation} 
@@ -97,7 +96,7 @@ function ReservationCreate() {
             />
         </div>
     );
-}
+};
 
 function getWeekDay(input) {
     const dateArray = input.split("-");
