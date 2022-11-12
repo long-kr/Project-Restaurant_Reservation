@@ -37,7 +37,7 @@ function TableCreate() {
 
     return (
         <div>
-            <h4>Create new table</h4>
+            <h4 className="h3 text-center">Create New Table</h4>
             <ErrorAlert error={error} />
             <SubmitForm 
                 table={table} 

@@ -5,7 +5,7 @@ export default function Header() {
     return (
         <div id="main-navbar"
             className="d-flex flex-row flex-nowrap 
-                navbar navbar-expand-lg navbar-light fixed-top "
+                navbar navbar-expand-lg navbar-light fixed-top"
         >
             <a
                 className="navbar-toggler"

@@ -38,7 +38,9 @@ function Dashboard({ todayDate }) {
     listTable(abortController.signal)
       .then(setTables)
       .catch(setTablesErrors)
-    return () => abortController.abort();
+    return () => {
+      abortController.abort();
+    }
   };
 
   const previousButtonHandler = () => {
@@ -64,14 +66,14 @@ function Dashboard({ todayDate }) {
 
   return (
     <main>
-      <div className="d-flex justify-content-center py-2">
-        <button className="mr-2 btn btn-light" onClick={previousButtonHandler}>
+      <div role="group" className="d-flex py-2 btn-group">
+        <button className="btn btn-outline-light" onClick={previousButtonHandler}>
           Previous day
         </button>
-        <button className="mr-2 btn btn-light" onClick={todayButtonHandler}>
+        <button className="btn btn-outline-light" onClick={todayButtonHandler}>
           Today
         </button>
-        <button className="btn btn-light" onClick={nextButtonHandler}>
+        <button className="mr-2 btn btn-outline-light" onClick={nextButtonHandler}>
           Next day
         </button>
       </div>

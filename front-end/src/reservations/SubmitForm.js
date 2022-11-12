@@ -9,7 +9,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
              <form onSubmit={submitHandler}>
                 <div className="form-row">
                     <label className="col-md-5 mb-3" htmlFor="first_name">
-                        <span>First Name:</span>
+                        <p>First Name:</p>
                         <input
                             id="first_name"
                             type="text"
@@ -22,7 +22,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                         />
                     </label>
                     <label className="col-md-5 mb-3" htmlFor="last_name">
-                        <span>Last Name:</span>
+                        <p>Last Name:</p>
                         <input
                             id="last_name"
                             type="text"
@@ -38,7 +38,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                 <br />
                 <div className="form-row">
                     <label className="col-md-5 mb-3" htmlFor="mobile_number">
-                        <span>Mobile Number:</span>
+                        <p>Mobile Number:</p>
                         <input
                             id="mobile_number"
                             type="tel"
@@ -52,7 +52,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                     </label>
                     <br />
                     <label className="col-md-5 mb-3" htmlFor="people">
-                        <span>Number of Guest:</span>                    
+                        <p>Number of Guest:</p>                    
                         <input
                             id="people"
                             type="number"
@@ -69,7 +69,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                 <br />
                 <div className="form-row">
                 <label className="col-md-5 mb-3" htmlFor="reservation_date">
-                    <span>Date to reserve:</span>
+                    <p>Date to reserve:</p>
                     <input id="reservation_date" 
                         type="date"
                         name="reservation_date"
@@ -82,7 +82,7 @@ export default function SubmitForm({submitHandler, changeHandler, reservation}) 
                 </label>
                 <br />
                 <label className="col-md-5 mb-3" htmlFor="reservation_time">
-                    <span>Time to reserve:</span>                    
+                    <p>Time to reserve:</p>                    
                     <input id="reservation_time" 
                         type="time"     
                         name="reservation_time"

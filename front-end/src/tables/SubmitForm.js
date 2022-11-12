@@ -8,7 +8,7 @@ function SubmitForm({submitHandler, changeHandler, table}) {
         <div>
             <form onSubmit={submitHandler}>
                 <label className="col-md-5 mb-3 pl-0" htmlFor="table_name">
-                    <span>Table Name:</span>
+                    <p>Table Name:</p>
                     <input
                         id="table_name"
                         type="text"
@@ -23,7 +23,7 @@ function SubmitForm({submitHandler, changeHandler, table}) {
                 </label>
                 <br />
                 <label className="col-md-5 mb-3 pl-0"htmlFor="capacity">
-                    <span>Capacity:</span>
+                    <p>Capacity:</p>
                     <input
                         id="capacity"
                         type="number"
