@@ -1,5 +1,5 @@
-# Project: Restaurant-reservation-manage-app
-- Live version: https://final-cap-reservations-cliend.vercel.app/dashboard
+# Project: Reservation Management Web App
+- Live: `https://final-cap-reservations-cliend.vercel.app/dashboard`
 
 ## Installation
 1. Fork and clone this repository.
@@ -10,7 +10,7 @@
 1. Run `npm install` to install project dependencies.
 1. Run `npm run start:dev` to start your server in development mode.
 
-### API endpoint:
+## API endpoint:
 | Endpoint | return |
 | ----------- | ----------- |
 | GET /reservations?date=yyyy-mm-dd | respone with list of all reservations by `date` |
@@ -24,7 +24,7 @@
 | PUT /tables/table_id/status | send a `PUT` request to assign a `reservation_id` to table and change reseration `status` |
 | DELETE /tables/table_id/status | send a `DELETE` request to remove a `reservation_id` off table and change reservation `status` |
 
-### Client:
+## Client:
 - This web can be used by restaurant manages to create, update, and set seat for customer's reservations.
 
 | path | summary |
@@ -36,13 +36,15 @@
 | /reservations/:reservation_id/edit | edit an existing reservation |
 | /tables/new | create new table | 
 
+## Photo
+
  ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
  
- - `Previous day` `Today` `Next day` buttons are used to move desire day.
- - `Seat` button use to assign table.
- - `Cancel` will cancel reservation and remove it from dashboard.
- - You can use `finish` button to free a table.
- - Create new reservation will be restricted if past days, tuesday, or post time. 
- - Reservation time must be between 10h30 a.m and 9h30 p.m.
- - Number of guest must be smaller than table capacity in order to set seat.
- - I didn't add validation for phone number since everyone can use it.
+- `Previous day` `Today` `Next day` buttons are used to move to the desired day.
+- `Seat` button is used to assign table.
+- `Cancel` will cancel the reservation and remove it from the dashboard.
+- You can use the `finish` button to free a table.
+- Creating new reservations will be restricted if past days, Tuesday, or post time.
+- Reservation time must be between 10h30 a.m and 9h30 p.m.
+- The number of guests must be smaller than the table capacity in order to set seats.
+- I didn't add validation for the phone numbers since everyone can use it.
