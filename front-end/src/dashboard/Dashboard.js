@@ -66,39 +66,41 @@ function Dashboard({ todayDate }) {
 
   return (
     <main>
-      <div className="d-flex flex-nowrap justify-content-around">
-        <h4 className="mb-0 h3">Date: {date}</h4>
+      <div className="d-flex justify-content-around">
+        <h4 className="mb-0 h3 ">Date: {date}</h4>
       </div>
-      <div role="group" className="d-flex py-2 btn-group">
+      <div role="group" className="d-flex py-2 btn-group ">
         <button className="btn btn-dark border-right" onClick={previousButtonHandler}>
           Previous day
         </button>
         <button className="btn btn-dark" onClick={todayButtonHandler}>
           Today
         </button>
-        <button className="mr-2 btn btn-dark" onClick={nextButtonHandler}>
+        <button className="btn btn-dark" onClick={nextButtonHandler}>
           Next day
         </button>
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      <section className="d-flex flex-row">
-        <div alt="reservations" className="pt-2 flex-grow-1 bd-highlight">
-          { !!reservations.length && 
+      <section className="row justify-content-between">
+        <div className="col-lg-8 py-2">
+          {!!reservations.length && 
             <ReservationsList 
               reservations={reservations} 
               setError={setReservationsError}
             />
           }
         </div>
-        <div id="table" className="carousel slide col-lg-3" data-ride="carousel">
-          <div className="carousel-inner">
-            { !!tables.length && 
-              <TableList
-                tables={tables}
-                unSeatingHandler={finishButtonHandler}
-              />
-            }
+        <div className="col-lg-4 order-first order-lg-2">
+          <div id="table" className="carousel slide" data-ride="carousel">
+            <div className="carousel-inner">
+              { !!tables.length && 
+                <TableList
+                  tables={tables}
+                  unSeatingHandler={finishButtonHandler}
+                />
+              }
+            </div>
           </div>
         </div>
       </section>

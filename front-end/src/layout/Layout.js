@@ -17,11 +17,11 @@ function Layout() {
         <div id="sidebarMenu" className="collapse d-lg-block sidebar collapse col-sm">
           <Menu />
         </div>
+        <div >
+          <Header />
+        </div>
         <div className="col">
-          <div>
-            <Header />
-          </div>
-          <div style={{ marginTop: 110 }} className="main-background ">
+          <div style={{ marginTop: 90 }} className="main-background">
             <Routes />
           </div>
         </div>

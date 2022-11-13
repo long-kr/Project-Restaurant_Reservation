@@ -13,26 +13,30 @@ function TableView({ table, finishButtonHandler }) {
                 </p>
                 <p className="card-text">Capacity: {table.capacity}</p>
                 <p className="card-text">Reservation ID: {table.reservation_id}</p>
-                { table.reservation_id && 
-                    <button 
-                        data-table-id-finish={table.table_id} 
-                        className="btn btn-outline-light"
-                        onClick={() => finishButtonHandler(table.table_id)}>
-                        Finish
-                    </button>
-                }
-                <div className="d-flex justify-content-center">
-                    <a className="carousel" role="button" href="#table" data-slide="prev">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span className="sr-only">Previous</span>
-                    </a>
-                    <a className="carousel" role="button" href="#table" data-slide="next">
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span className="sr-only">Next</span>
-                    </a>
-                </div>
+                
             </div>
-        </div>
+            <div className="d-flex justify-content-between card-footer bg-dark">
+                <div>
+                    { table.reservation_id && 
+                        <button 
+                            data-table-id-finish={table.table_id} 
+                            className="btn btn-sm btn-dark"
+                            onClick={() => finishButtonHandler(table.table_id)}>
+                            Finish
+                        </button>
+                    } 
+                </div>
+                <div style={{color : "transparent" }}>finish</div>
+            </div>
+            <a className="carousel-control-prev" role="button" href="#table" data-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+            </a>
+            <a className="carousel-control-next" role="button" href="#table" data-slide="next">
+                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <span className="sr-only">Next</span>
+            </a>
+         </div>
     )
 }
 

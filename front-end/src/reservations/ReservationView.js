@@ -31,7 +31,7 @@ function ReservationView({ reservation, cancelHandler }) {
                     <a  className="btn border-right"
                         href={`/reservations/${reservation.reservation_id}/edit`}
                     >
-                        &nbsp;&nbsp;Edit&nbsp;&nbsp;
+                        &nbsp;&nbsp; Edit &nbsp;&nbsp;
                     </a>
                     <button data-reservation-id-cancel={reservation.reservation_id}
                         className="btn"                    
@@ -43,7 +43,7 @@ function ReservationView({ reservation, cancelHandler }) {
                         <a href={`/reservations/${reservation.reservation_id}/seat`}
                             className="btn border-left"
                         >
-                            &nbsp;&nbsp;Seat&nbsp;&nbsp;
+                            &nbsp;&nbsp; Seat &nbsp;&nbsp;
                         </a>
                     }
                 </div>

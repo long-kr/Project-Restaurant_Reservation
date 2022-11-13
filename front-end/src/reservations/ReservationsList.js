@@ -18,7 +18,7 @@ function ReservationList({ reservations, setError }) {
         };
     };
 
-    const list = reservations.map((reservation) => 
+    const list = reservations.map((reservation, i) =>   
         <ReservationView 
             key={reservation.reservation_id}
             reservation={reservation}
@@ -26,7 +26,11 @@ function ReservationList({ reservations, setError }) {
         />
     );
     
-    return list
+    return  (
+        <div>
+            {list}
+        </div>
+    )
 };
 
 export default ReservationList;

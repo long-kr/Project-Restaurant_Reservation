@@ -69,16 +69,19 @@ export default function SetReservationSeat() {
                     </select>
                 </label>
                 <br />
-                <button className="mr-2 my-2 btn btn-outline-light"
-                        onClick={() => history.goBack()}
-                >
-                    Cancel
-                </button>
-                <button className="my-2 btn btn-outline-light" 
-                        type="submit"
-                >
-                    Submit
-                </button>
+                <div className="btn-group">
+                    <button className="btn btn-dark"
+                            onClick={() => history.goBack()}
+                    >
+                        Cancel
+                    </button>
+                    <button className="btn btn-dark border-left" 
+                            type="submit"
+                    >
+                        Submit
+                    </button>
+                </div>
+                
             </form>
         </div>
     )
