@@ -204,7 +204,7 @@
  };
  
  /**
-  * Send a DELETE request to create a table
+  * Send a DELETE request to free a table
   * @return nothing
   */
  export async function unSeatingTable(table_id, signal) {
@@ -218,5 +218,21 @@
    return await fetchJson(url, options, {});
  };
  
+
+ /**
+  * Send a DELETE request to free a table
+  * @return nothing
+  */
+export async function deleteTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}`;
+  const options = {
+    method: "DELETE",
+    headers,
+    signal
+  };
+
+  return await fetchJson(url, options, {});
+};
+  
  
  

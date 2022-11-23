@@ -12,10 +12,12 @@ router.route("/:table_id([0-9]+)/seat")
     .delete(controller.delete)
     .all(methodNotAllowed)
 
+router.route("/:table_id([0-9]+)")
+    .delete(controller.destroyTable)
+
 router.route("/")
     .get(controller.list)
     .post(controller.create)
-    .delete(controller.destroyTable)
     .all(methodNotAllowed)
 
 module.exports = router;

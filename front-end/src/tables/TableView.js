@@ -1,6 +1,6 @@
 import React from "react";
 
-function TableView({ table, finishButtonHandler }) {
+function TableView({ table, finishButtonHandler, deleteTableHandler }) {
 
     return (
         <div>
@@ -20,13 +20,15 @@ function TableView({ table, finishButtonHandler }) {
                     { table.reservation_id && 
                         <button 
                             data-table-id-finish={table.table_id} 
-                            className="btn btn-sm btn-dark"
+                            className="btn btn-dark"
                             onClick={() => finishButtonHandler(table.table_id)}>
                             Finish
                         </button>
                     } 
                 </div>
-                <div style={{color : "transparent" }}>finish</div>
+                <button className="btn btn-dark"
+                    onClick={() => deleteTableHandler(table.table_id)}
+                >Delete</button>
             </div>
             <a className="carousel-control-prev" role="button" href="#table" data-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>

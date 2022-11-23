@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { listReservations, listTable, unSeatingTable } from "../utils/api";
+import { deleteTable, listReservations, listTable, unSeatingTable } from "../utils/api";
 import { previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
@@ -64,6 +64,15 @@ function Dashboard({ todayDate }) {
     };
   };
 
+  function deleteTableHandler(table_id) {
+    if(window.confirm("Are you sure to delete this table?\nThis cannot be undone.")) {
+      setTablesErrors(null);
+      deleteTable(table_id)
+        .then(() => loadDashboard())
+        .catch(setTablesErrors)
+    };
+  };
+
   return (
     <main>
       <div className="d-flex justify-content-around">
@@ -98,6 +107,7 @@ function Dashboard({ todayDate }) {
                 <TableList
                   tables={tables}
                   unSeatingHandler={finishButtonHandler}
+                  deleteTableHandler={deleteTableHandler}
                 />
               }
             </div>
