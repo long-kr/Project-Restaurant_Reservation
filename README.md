@@ -38,7 +38,8 @@
 
 ## Photo
 
- ![alt pic1](https://i.ibb.co/4NcbPWx/pic1.png)
+![reservation-app2](https://user-images.githubusercontent.com/57731304/201519368-4c5c2205-3087-407d-b076-92ca0a340b24.jpg)
+
  
 - `Previous day` `Today` `Next day` buttons are used to move to the desired day.
 - `Seat` button is used to assign table.
