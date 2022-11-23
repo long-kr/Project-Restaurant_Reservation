@@ -45,10 +45,17 @@ function destroy(deletedTable) {
         })
 };
 
+function destroyTable(deletedTable) {
+    return knex(table)
+        .where({"table_id": deletedTable.table_id})
+        .del()
+};
+
 module.exports = {
     list,
     create,
     read,
     update,
-    destroy
+    destroy,
+    destroyTable
 };

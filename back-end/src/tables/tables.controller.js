@@ -208,11 +208,27 @@ async function update(req, res) {
 };
 
 /**
- * DELETE handler for table resources
+ * DELETE handler for free a table
  */ 
 async function destroy(req, res) {
     const deleted = await service.destroy(res.locals.table);
-    res.status(200).json("deleted");
+    res.status(200).json("freed");
+};
+
+/**
+ * DELETE handler for deleting a table
+ */ 
+async function destroyTable(req, res, next) {
+
+    if(res.locals.table.reservation_id !== null) {
+        return next({
+            status: 400,
+            message: "Please free table first before delete"
+        })
+    };
+    
+    const deleted = await service.destroyTable(res.locals.table);
+    res.status(200).json("deleted")
 };
 
 module.exports = {
@@ -241,5 +257,9 @@ module.exports = {
         asyncErrorBoundary (tableExist),
         isTableOcccupied,
         asyncErrorBoundary (destroy),
+    ],
+    destroyTable: [
+        asyncErrorBoundary (tableExist),
+        asyncErrorBoundary (destroyTable),
     ]
 };
