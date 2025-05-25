@@ -1,6 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+//TODO: create input component
+
 export default function SubmitForm({submitHandler, changeHandler, reservation}) {
     const  history = useHistory();
     

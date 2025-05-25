@@ -1,19 +1,21 @@
-import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { today } from "../utils/date-time";
 import Dashboard from "../dashboard/Dashboard";
-import NotFound from "./NotFound";
 import ReservationCreate from "../reservations/ReservationCreate";
-import TableCreate from "../tables/TableCreate";
-import SetReservationSeat from "../seats/SetReservationSeat";
-import Search from "../search/Search";
 import ReservationsEdit from "../reservations/ReservationsEdit";
+import Search from "../search/Search";
+import SetReservationSeat from "../seats/SetReservationSeat";
+import TableCreate from "../tables/TableCreate";
+import { today } from "../utils/date-time";
+import NotFound from "./NotFound";
 
+// TODO: fix id name
 /**
  * Defines all the routes for the application.
  * @returns {JSX.Element}
  */
 function Routes() {
+  const todayString = today();
+  
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -23,10 +25,10 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/dashboard/">
-        <Dashboard todayDate={today()} />
+        <Dashboard todayDate={todayString} />
       </Route>
       <Route path="/reservations/new">
-        <ReservationCreate date={today()}/>
+        <ReservationCreate />
       </Route>
       <Route exact={true} path={`/reservations/:reservation_id/seat`}>
         <SetReservationSeat />
