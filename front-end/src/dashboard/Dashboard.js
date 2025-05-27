@@ -2,17 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Empty } from "../components/Empty";
 import { Button } from "../components/ui/Button";
-import ReservationsList from "../reservations/ReservationsList";
-import TableList from "../tables/TableList";
+import ReservationView from "../reservations/ReservationView";
+import TableView from "../tables/TableView";
 import {
 	deleteTable,
 	listReservations,
 	listTable,
+	setReservationStatus,
 	unSeatingTable,
 } from "../utils/api";
-import { next, previous } from "../utils/date-time";
-
-// create Button component
+import { next, previous, today } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -20,27 +19,24 @@ import { next, previous } from "../utils/date-time";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ todayDate }) {
+function Dashboard() {
+	const todayDateString = today();
 	const history = useLocation();
 
 	const [reservations, setReservations] = useState([]);
 	const [tables, setTables] = useState([]);
-	const [reservationsError, setReservationsError] = useState(null);
-	const [tablesError, setTablesError] = useState(null);
-	const [date, setDate] = useState(() => {
-		if (history.search) {
-			return history.search.slice(6, 16);
-		}
-		return todayDate;
-	});
+	const [date, setDate] = useState(() =>
+		history.search ? history.search.slice(6, 16) : todayDateString
+	);
 
-	const loadDashboard = useCallback((signal) => {
-		setReservationsError(null);
-		setTablesError(null);
-		listReservations({ date }, signal)
-			.then(setReservations)
-			.catch(setReservationsError);
-		listTable().then(setTables).catch(setTablesError);
+	const loadDashboard = useCallback(async (signal) => {
+		try {
+			const reservations = await listReservations({ date }, signal);
+			setReservations(reservations);
+
+			const tables = await listTable();
+			setTables(tables);
+		} catch (error) {}
 	}, []);
 
 	const previousButtonHandler = () => {
@@ -48,7 +44,7 @@ function Dashboard({ todayDate }) {
 	};
 
 	const todayButtonHandler = () => {
-		setDate(todayDate);
+		setDate(todayDateString);
 	};
 
 	const nextButtonHandler = () => {
@@ -61,10 +57,9 @@ function Dashboard({ todayDate }) {
 				"Is this table ready to seat new guests?\nThis cannot be undone."
 			)
 		) {
-			setTablesError(null);
 			unSeatingTable(table_id)
 				.then(() => loadDashboard())
-				.catch(setTablesError);
+				.catch();
 		}
 	}
 
@@ -74,10 +69,27 @@ function Dashboard({ todayDate }) {
 				"Are you sure to delete this table?\nThis cannot be undone."
 			)
 		) {
-			setTablesError(null);
 			deleteTable(table_id)
 				.then(() => loadDashboard())
-				.catch(setTablesError);
+				.catch();
+		}
+	}
+
+	function cancelReservationHandler(reservation_id) {
+		if (
+			window.confirm(
+				"Do you want to cancel this reservation?\nThis cannot be undone."
+			)
+		) {
+			const abortController = new AbortController();
+			setReservationStatus(
+				reservation_id,
+				{ status: "cancelled" },
+				abortController.signal
+			)
+				.then(() => window.location.reload())
+				.catch();
+			return () => abortController.abort();
 		}
 	}
 
@@ -96,41 +108,56 @@ function Dashboard({ todayDate }) {
 			</div>
 
 			<div role='group' className='d-flex py-2 btn-group '>
-				<Button
-					className='btn btn-dark border-right'
-					onClick={previousButtonHandler}
-				>
+				<Button className='btn-dark' onClick={previousButtonHandler}>
 					Previous day
 				</Button>
 
-				<Button className='btn btn-dark' onClick={todayButtonHandler}>
+				<Button className='btn-dark' onClick={todayButtonHandler}>
 					Today
 				</Button>
 
-				<Button className='btn btn-dark' onClick={nextButtonHandler}>
+				<Button className='btn-dark' onClick={nextButtonHandler}>
 					Next day
 				</Button>
 			</div>
 
 			<section className='row justify-content-between'>
-				<div className='col-lg-8 py-2'>
+				<div className='col-lg-8'>
 					{reservations.length ? (
-						<ReservationsList
-							reservations={reservations}
-							setError={setReservationsError}
-						/>
-					) : <Empty/>}
+						<div className='py-2'>
+							{reservations.map((reservation) => (
+								<ReservationView
+									key={reservation.reservation_id}
+									reservation={reservation}
+									cancelHandler={cancelReservationHandler}
+								/>
+							))}
+						</div>
+					) : (
+						<Empty />
+					)}
 				</div>
 
 				<div className='col-lg-4 order-first order-lg-2'>
 					<div id='table' className='carousel slide' data-ride='carousel'>
 						<div className='carousel-inner'>
-							{!!tables.length && (
-								<TableList
-									tables={tables}
-									unSeatingHandler={finishButtonHandler}
-									deleteTableHandler={deleteTableHandler}
-								/>
+							{!!tables.length ? (
+								tables.map((table, i) => (
+									<div
+										className={
+											i === 0 ? "carousel-item active" : "carousel-item"
+										}
+									>
+										<TableView
+											key={table.table_id}
+											table={table}
+											finishButtonHandler={finishButtonHandler}
+											deleteTableHandler={deleteTableHandler}
+										/>
+									</div>
+								))
+							) : (
+								<Empty />
 							)}
 						</div>
 					</div>
