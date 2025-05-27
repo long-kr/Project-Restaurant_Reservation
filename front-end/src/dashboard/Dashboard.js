@@ -87,7 +87,9 @@ function Dashboard() {
 				{ status: "cancelled" },
 				abortController.signal
 			)
-				.then(() => window.location.reload())
+				.then(() => {
+					window.location.reload();
+				})
 				.catch();
 			return () => abortController.abort();
 		}

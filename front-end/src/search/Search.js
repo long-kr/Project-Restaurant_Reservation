@@ -1,50 +1,97 @@
-import React, { useState } from "react";
-import { searchReservationsByPhone } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { Empty } from "../components/Empty";
+import ReservationView from "../reservations/ReservationView";
+import { searchReservationsByPhone, setReservationStatus } from "../utils/api";
 import SearchForm from "./SearchForm";
-import ReservationList from "../reservations/ReservationsList";
 
 /**
  * Defines the Search Page
  * @input phone number
- *  return reservations user wants to find
+ * @returns {JSX.Element}
  */
 function Search() {
-  const [phoneNumber, setPhoneNumer] = useState("");
-  const [reservations, setReservations] = useState([]);
-  const [error, setError] = useState(null);
+	const [phoneNumber, setPhoneNumer] = useState("");
+	const [reservations, setReservations] = useState([]);
 
-  const changeHandler = (e) => {
-    setPhoneNumer(e.target.value);
-  };
+	const controllerRef = useRef(null);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const abortController = new AbortController();
-    setError(null);
-    searchReservationsByPhone({ mobile_number: phoneNumber }, abortController.signal)
-      .then((data) => {
-        setReservations(data);
-        if (!data.length) {
-          setError({ message: "No reservations found" });
-        }
-      })
-      .catch(setError);
-    return () => abortController.abort();
-  };
+	const changeHandler = (e) => {
+		setPhoneNumer(e.target.value);
+	};
 
-  return (
-    <div>
-      <h4 className="h3 text-center">Search Reservations</h4>
-      <ErrorAlert error={error} />
-      <SearchForm
-        phoneNumber={phoneNumber}
-        changeHandler={changeHandler}
-        submitHandler={submitHandler}
-      />
-      <ReservationList reservations={reservations} setError={setError} />
-    </div>
-  );
+	const submitHandler = async (e) => {
+		e.preventDefault();
+
+		try {
+			const abortController = new AbortController();
+			controllerRef.current = abortController;
+
+			const reservation = await searchReservationsByPhone(
+				{ mobile_number: phoneNumber },
+				abortController.signal
+			);
+
+			setReservations(reservation);
+		} catch (error) {
+			toast.error("No reservations found for this phone number.");
+		}
+	};
+
+	function cancelReservationHandler(reservation_id) {
+		if (
+			window.confirm(
+				"Do you want to cancel this reservation?\nThis cannot be undone."
+			)
+		) {
+			const abortController = new AbortController();
+			controllerRef.current = abortController;
+
+			setReservationStatus(
+				reservation_id,
+				{ status: "cancelled" },
+				abortController.signal
+			)
+				.then(() => {
+					window.location.reload();
+				})
+				.catch();
+		}
+	}
+
+	useEffect(() => {
+		return () => {
+			if (controllerRef.current) {
+				controllerRef.current.abort();
+			}
+		};
+	}, []);
+
+	return (
+		<div>
+			<h4 className='h3 text-center'>Search Reservations</h4>
+
+			<SearchForm
+				phoneNumber={phoneNumber}
+				changeHandler={changeHandler}
+				submitHandler={submitHandler}
+			/>
+
+			{reservations.length ? (
+				<div className='py-2'>
+					{reservations.map((reservation) => (
+						<ReservationView
+							key={reservation.reservation_id}
+							reservation={reservation}
+							cancelHandler={cancelReservationHandler}
+						/>
+					))}
+				</div>
+			) : (
+				<Empty />
+			)}
+		</div>
+	);
 }
 
 export default Search;

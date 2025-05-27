@@ -14,35 +14,37 @@ import NotFound from "./NotFound";
  */
 function Routes() {
 	return (
-		<Switch>
-			<Route exact={true} path='/'>
-				<Redirect to={"/dashboard"} />
-			</Route>
-			<Route exact={true} path='/reservations'>
-				<Redirect to={"/dashboard"} />
-			</Route>
-			<Route path='/dashboard/'>
-				<Dashboard />
-			</Route>
-			<Route path='/reservations/new'>
-				<ReservationCreate />
-			</Route>
-			<Route exact={true} path={`/reservations/:reservation_id/seat`}>
-				<SetReservationSeat />
-			</Route>
-			<Route path={`/reservations/:reservation_id/edit`}>
-				<ReservationsEdit />
-			</Route>
-			<Route path='/tables/new'>
-				<TableCreate />
-			</Route>
-			<Route path={`/search`}>
-				<Search />
-			</Route>
-			<Route>
-				<NotFound />
-			</Route>
-		</Switch>
+		<div style={{ marginTop: 90 }} className='main-background col'>
+			<Switch>
+				<Route exact={true} path='/'>
+					<Redirect to={"/dashboard"} />
+				</Route>
+				<Route exact={true} path='/reservations'>
+					<Redirect to={"/dashboard"} />
+				</Route>
+				<Route path='/dashboard/'>
+					<Dashboard />
+				</Route>
+				<Route path='/reservations/new'>
+					<ReservationCreate />
+				</Route>
+				<Route exact={true} path={`/reservations/:reservation_id/seat`}>
+					<SetReservationSeat />
+				</Route>
+				<Route path={`/reservations/:reservation_id/edit`}>
+					<ReservationsEdit />
+				</Route>
+				<Route path='/tables/new'>
+					<TableCreate />
+				</Route>
+				<Route path={`/search`}>
+					<Search />
+				</Route>
+				<Route>
+					<NotFound />
+				</Route>
+			</Switch>
+		</div>
 	);
 }
 
