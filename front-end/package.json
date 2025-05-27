@@ -16,11 +16,14 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
+    "clsx": "^2.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "sonner": "^2.0.3",
+    "starter-restaurant-reservation-front-end": "file:",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -42,7 +45,7 @@
     "test:e2e:run": "wait-on http://localhost:5001/reservations?date=2020-01-01 && jest --detectOpenHandles --forceExit --config ./e2e/jest.config.js",
     "test:start:backend": "npm run test:start --prefix ./../back-end",
     "test:start:frontend": "npx cross-env BROWSER=none NODE_ENV=test react-scripts start",
-    "test:unit": "react-scripts test"    
+    "test:unit": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
