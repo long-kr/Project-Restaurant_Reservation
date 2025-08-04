@@ -14,7 +14,7 @@ import NotFound from "./NotFound";
  */
 function Routes() {
 	return (
-		<div style={{ marginTop: 90 }} className='main-background col'>
+		<div className='main-background col'>
 			<Switch>
 				<Route exact={true} path='/'>
 					<Redirect to={"/dashboard"} />

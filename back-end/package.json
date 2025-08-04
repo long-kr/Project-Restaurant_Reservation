@@ -8,6 +8,9 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
     "directory": "/back-end"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
@@ -21,9 +24,14 @@
     "test:7": "npm run test -- us-07",
     "test:8": "npm run test -- us-08",
     "test:drop-database": "node test/drop-database",
-    "test:start": "npx cross-env LOG_LEVEL=warn NODE_ENV=test npm run test:start:run",
-    "test:start:run": "run-s test:drop-database start ",
-    "knex": "knex"
+    "test:start": "npx cross-env LOG_LEVEL=warn NODE_ENV=development npm run test:start:run",
+    "//test:start:run": "run-s test:drop-database start",
+    "test:start:run": "run-s start",
+    "knex": "knex",
+    "migrate": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "reset": "npm run migrate:rollback && npm run migrate && npm run seed",
+    "seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",
