@@ -8,7 +8,7 @@ describe("US-01 - Create and list reservations", () => {
 	beforeAll(() => {
 		return knex.migrate
 			.forceFreeMigrationsLock()
-			.then(() => knex.migrate.rollback(null, true))
+			.then(() => knex.migrate.rollback(undefined, true))
 			.then(() => knex.migrate.latest());
 	});
 
@@ -17,7 +17,9 @@ describe("US-01 - Create and list reservations", () => {
 	});
 
 	afterAll(async () => {
-		return await knex.migrate.rollback(null, true).then(() => knex.destroy());
+		return await knex.migrate
+			.rollback(undefined, true)
+			.then(() => knex.destroy());
 	});
 
 	describe("App", () => {
