@@ -22,7 +22,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "sonner": "^2.0.3",
+    "sonner": "2.0.3",
     "starter-restaurant-reservation-front-end": "file:",
     "web-vitals": "^0.2.4"
   },
