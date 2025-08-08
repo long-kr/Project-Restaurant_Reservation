@@ -29,7 +29,7 @@ module.exports = {
 	},
 	test: {
 		client: "postgresql",
-		pool: { min: 1, max: 5 },
+		pool: { min: 1, max: 1 },
 		connection: DATABASE_URL_TEST,
 		migrations: {
 			directory: path.join(__dirname, "src", "db", "migrations"),

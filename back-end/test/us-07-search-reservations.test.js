@@ -4,21 +4,18 @@ const app = require("../src/app");
 const knex = require("../src/db/connection");
 
 describe("US-07 - Search reservation by phone number", () => {
-	beforeAll(() => {
-		return knex.migrate
-			.forceFreeMigrationsLock()
-			.then(() => knex.migrate.rollback(undefined, true))
-			.then(() => knex.migrate.latest());
+	beforeAll(async () => {
+		await knex.migrate.forceFreeMigrationsLock();
+		await knex.migrate.rollback(undefined, true);
+		await knex.migrate.latest();
 	});
 
-	beforeEach(() => {
-		return knex.seed.run();
+	beforeEach(async () => {
+		await knex.seed.run();
 	});
 
 	afterAll(async () => {
-		return await knex.migrate
-			.rollback(undefined, true)
-			.then(() => knex.destroy());
+		await knex.migrate.rollback(undefined, true);
 	});
 
 	describe("GET /reservations?mobile_number=...", () => {

@@ -5,21 +5,18 @@ const knex = require("../src/db/connection");
 const moment = require("moment");
 
 describe("US-06 - Reservation status", () => {
-	beforeAll(() => {
-		return knex.migrate
-			.forceFreeMigrationsLock()
-			.then(() => knex.migrate.rollback(undefined, true))
-			.then(() => knex.migrate.latest());
+	beforeAll(async () => {
+		await knex.migrate.forceFreeMigrationsLock();
+		await knex.migrate.rollback(undefined, true);
+		await knex.migrate.latest();
 	});
 
-	beforeEach(() => {
-		return knex.seed.run();
+	beforeEach(async () => {
+		await knex.seed.run();
 	});
 
 	afterAll(async () => {
-		return await knex.migrate
-			.rollback(undefined, true)
-			.then(() => knex.destroy());
+		await knex.migrate.rollback(undefined, true);
 	});
 
 	describe("POST /reservations", () => {
