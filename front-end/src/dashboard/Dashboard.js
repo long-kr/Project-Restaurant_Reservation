@@ -29,15 +29,18 @@ function Dashboard() {
 		history.search ? history.search.slice(6, 16) : todayDateString
 	);
 
-	const loadDashboard = useCallback(async (signal) => {
-		try {
-			const reservations = await listReservations({ date }, signal);
-			setReservations(reservations);
+	const loadDashboard = useCallback(
+		async (signal) => {
+			try {
+				const reservations = await listReservations({ date }, signal);
+				setReservations(reservations);
 
-			const tables = await listTable();
-			setTables(tables);
-		} catch (error) {}
-	}, []);
+				const tables = await listTable();
+				setTables(tables);
+			} catch (error) {}
+		},
+		[date]
+	);
 
 	const previousButtonHandler = () => {
 		setDate(previous(date.toString()));
@@ -101,7 +104,7 @@ function Dashboard() {
 		return () => {
 			abortController.abort();
 		};
-	}, [date, loadDashboard]);
+	}, [loadDashboard]);
 
 	return (
 		<main>
