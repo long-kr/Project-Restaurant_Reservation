@@ -1,8 +1,8 @@
+import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import Header from "./Header";
 import "./Layout.css";
 import Menu from "./Menu";
-import Routes from "./Routes";
 
 /**
  * Defines the main layout of the application.
@@ -16,7 +16,9 @@ function Layout() {
 
 				<Header />
 
-				<Routes />
+				<div className='main-background col'>
+					<Outlet />
+				</div>
 			</div>
 
 			<Toaster />

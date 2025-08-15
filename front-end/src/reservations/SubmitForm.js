@@ -1,4 +1,5 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../utils/routes";
 
 //TODO: create input component
 
@@ -7,8 +8,7 @@ export default function SubmitForm({
 	changeHandler,
 	reservation,
 }) {
-	const history = useHistory();
-
+	const navigate = useNavigate();
 	return (
 		<form onSubmit={submitHandler}>
 			<div className='form-row'>
@@ -102,7 +102,11 @@ export default function SubmitForm({
 			</div>
 			<br />
 			<div className='btn-group'>
-				<button className='btn btn-dark' onClick={() => history.goBack()}>
+				<button
+					className='btn btn-dark'
+					onClick={() => navigate(routes.dashboard)}
+					type='button'
+				>
 					Cancel
 				</button>
 				<button className='btn btn-dark border-left' type='submit'>
