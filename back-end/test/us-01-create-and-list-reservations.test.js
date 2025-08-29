@@ -17,6 +17,12 @@ describe("US-01 - Create and list reservations", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
+		await knex.release();
+		await knex.destroy([
+			() => {
+				console.log("Global teardown: Closing database connection");
+			},
+		]);
 	});
 
 	describe("App", () => {

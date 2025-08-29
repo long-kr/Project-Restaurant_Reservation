@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function SubmitForm({ submitHandler, changeHandler, table }) {
 	const navigate = useNavigate();
+
 	return (
 		<div>
 			<form onSubmit={submitHandler}>

@@ -17,6 +17,7 @@ describe("US-06 - Reservation status", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
+		await knex.release();
 	});
 
 	describe("POST /reservations", () => {

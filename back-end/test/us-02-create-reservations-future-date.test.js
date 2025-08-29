@@ -16,6 +16,7 @@ describe("US-02 - Create reservations future date", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
+		await knex.release();
 	});
 
 	describe("POST /reservations", () => {

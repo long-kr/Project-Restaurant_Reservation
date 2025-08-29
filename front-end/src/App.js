@@ -28,11 +28,11 @@ const router = createBrowserRouter([
 			{ path: routes.reservationsNew, element: <ReservationCreate /> },
 			{
 				path: routes.reservationsEdit(":reservation_id"),
-				element: <SetReservationSeat />,
+				element: <ReservationsEdit />,
 			},
 			{
 				path: routes.reservationsSeat(":reservation_id"),
-				element: <ReservationsEdit />,
+				element: <SetReservationSeat />,
 			},
 			{ path: routes.tablesNew, element: <TableCreate /> },
 			{ path: routes.search, element: <Search /> },
@@ -42,7 +42,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	return <RouterProvider router={router} />;
+	return (
+		<RouterProvider future={{ v7_startTransition: true }} router={router} />
+	);
 }
 
 export default App;

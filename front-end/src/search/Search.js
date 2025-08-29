@@ -58,7 +58,7 @@ function Search() {
 				.catch();
 		}
 	}
-
+	console.log(reservations);
 	useEffect(() => {
 		return () => {
 			if (controllerRef.current) {
@@ -88,7 +88,7 @@ function Search() {
 					))}
 				</div>
 			) : (
-				<Empty />
+				<Empty message='No reservations found' />
 			)}
 		</div>
 	);

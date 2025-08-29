@@ -16,6 +16,7 @@ describe("US-05 - Finish an occupied table", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
+		await knex.release();
 	});
 
 	describe("DELETE /tables/:table_id/seat", () => {

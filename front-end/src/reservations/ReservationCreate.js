@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect } from "react-router";
+import { useNavigate } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 import { today } from "../utils/date-time";
@@ -67,6 +67,8 @@ const timeHandler = (dateInput, timeInput, setError) => {
 };
 
 function ReservationCreate() {
+	const navigate = useNavigate();
+
 	const [reservation, setReservation] = useState({ ...initialReservation });
 	const [error, setError] = useState([]);
 
@@ -85,8 +87,7 @@ function ReservationCreate() {
 
 		createReservation(reservation, abortController.signal)
 			.then(() => {
-				// TODO: check logic
-				redirect(`/dashboard?date=${reservation.reservation_date}`);
+				navigate(`/dashboard?date=${reservation.reservation_date}`);
 			})
 			.catch((errors) => setError([errors]));
 	};

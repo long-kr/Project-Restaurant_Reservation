@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { redirect } from "react-router";
+import { useNavigate } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
 import SubmitForm from "./SubmitForm";
 
+const initialTable = {
+	table_name: "",
+	capacity: "",
+};
+
 function TableCreate() {
-	const initialTable = {
-		table_name: "",
-		capacity: "",
-	};
+	const navigate = useNavigate();
 
 	const [table, setTable] = useState(initialTable);
 	const [error, setError] = useState(null);
@@ -20,8 +22,7 @@ function TableCreate() {
 		table.capacity = parseInt(table.capacity);
 		createTable(table, abortController.signal)
 			.then(() => {
-				// TODO: check logic
-				redirect("/dashboard");
+				navigate("/dashboard");
 			})
 			.catch(setError);
 		return () => abortController.abort();

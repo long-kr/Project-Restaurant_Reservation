@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { redirect, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { getReservation, updateReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
+import { routes } from "../utils/routes";
 import SubmitForm from "./SubmitForm";
 
 function ReservationsEdit() {
@@ -15,6 +16,7 @@ function ReservationsEdit() {
 		reservation_time: "",
 	};
 
+	const navigate = useNavigate();
 	const { reservation_id } = useParams();
 	const [reservation, setReservation] = useState({ ...initialReservation });
 	const [error, setError] = useState(null);
@@ -47,7 +49,7 @@ function ReservationsEdit() {
 		reservation.people = parseInt(reservation.people);
 		updateReservation(reservation_id, reservation, abortController.signal)
 			.then(() => {
-				redirect(`/dashboard?date=${reservation.reservation_date}`);
+				navigate(`${routes.dashboard}?date=${reservation.reservation_date}`);
 			})
 			.catch((errors) => setError([errors]));
 		return () => abortController.abort();
