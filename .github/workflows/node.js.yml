@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/puppeteer/puppeteer:latest
+      image: ghcr.io/puppeteer/puppeteer:18
 
     services:
       postgres:
@@ -30,11 +30,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
 
       - name: Cache node modules
         id: node-cache
