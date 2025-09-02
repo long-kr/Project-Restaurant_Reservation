@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 import SubmitForm from "./SubmitForm";
-import ErrorAlert from "../layout/ErrorAlert";
 
 const initialReservation = {
 	first_name: "",
@@ -67,7 +67,8 @@ const timeHandler = (dateInput, timeInput, setError) => {
 };
 
 function ReservationCreate() {
-	const history = useHistory();
+	const navigate = useNavigate();
+
 	const [reservation, setReservation] = useState({ ...initialReservation });
 	const [error, setError] = useState([]);
 
@@ -86,7 +87,7 @@ function ReservationCreate() {
 
 		createReservation(reservation, abortController.signal)
 			.then(() => {
-				history.push(`/dashboard?date=${reservation.reservation_date}`);
+				navigate(`/dashboard?date=${reservation.reservation_date}`);
 			})
 			.catch((errors) => setError([errors]));
 	};
@@ -102,7 +103,7 @@ function ReservationCreate() {
 		<div>
 			<h4 className='h3 text-center'>Create New Reservation</h4>
 			{error && error.map((err, i) => <ErrorAlert key={i} error={err} />)}
-            
+
 			<SubmitForm
 				reservation={reservation}
 				submitHandler={submitHandler}

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
-import { listTable, seatingTable } from "../utils/api";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { listTable, seatingTable } from "../utils/api";
+import { routes } from "../utils/routes";
 
 const initialFormState = {
 	table_id: "",
@@ -11,7 +12,7 @@ const initialFormState = {
  * Route `/reservations/:reservation_id/seat`
  */
 export default function SetReservationSeat() {
-	const history = useHistory();
+	const navigate = useNavigate();
 	const { reservation_id } = useParams();
 
 	const [formData, setFormData] = useState({ ...initialFormState });
@@ -35,18 +36,20 @@ export default function SetReservationSeat() {
 		e.preventDefault();
 		setError(null);
 		seatingTable(formData.table_id, { reservation_id })
-			.then((data) => {
-				console.log(data);
-				history.push("/dashboard");
+			.then(() => {
+				navigate(routes.dashboard);
 			})
 			.catch(setError);
 	};
 
-	const tableOptions = tables.map((table) => (
-		<option key={table.table_id} value={table.table_id}>
-			{table.table_name} - {table.capacity}
-		</option>
-	));
+	const tableOptions = tables.map((table) => {
+		const label = `${table.table_name} - ${table.capacity}`;
+		return (
+			<option key={table.table_id} value={table.table_id}>
+				{label}
+			</option>
+		);
+	});
 
 	return (
 		<div>
@@ -68,7 +71,10 @@ export default function SetReservationSeat() {
 				</label>
 				<br />
 				<div className='btn-group'>
-					<button className='btn btn-dark' onClick={() => history.goBack()}>
+					<button
+						className='btn btn-dark'
+						onClick={() => navigate(routes.dashboard)}
+					>
 						Cancel
 					</button>
 					<button className='btn btn-dark border-left' type='submit'>

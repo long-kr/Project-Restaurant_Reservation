@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import { Empty } from "../components/Empty";
 import { Button } from "../components/ui/Button";
 import ReservationView from "../reservations/ReservationView";
@@ -29,15 +29,18 @@ function Dashboard() {
 		history.search ? history.search.slice(6, 16) : todayDateString
 	);
 
-	const loadDashboard = useCallback(async (signal) => {
-		try {
-			const reservations = await listReservations({ date }, signal);
-			setReservations(reservations);
+	const loadDashboard = useCallback(
+		async (signal) => {
+			try {
+				const reservations = await listReservations({ date }, signal);
+				const tables = await listTable();
 
-			const tables = await listTable();
-			setTables(tables);
-		} catch (error) {}
-	}, []);
+				setReservations(reservations);
+				setTables(tables);
+			} catch (error) {}
+		},
+		[date]
+	);
 
 	const previousButtonHandler = () => {
 		setDate(previous(date.toString()));
@@ -101,7 +104,7 @@ function Dashboard() {
 		return () => {
 			abortController.abort();
 		};
-	}, [date, loadDashboard]);
+	}, [loadDashboard]);
 
 	return (
 		<main>
@@ -140,29 +143,19 @@ function Dashboard() {
 					)}
 				</div>
 
-				<div className='col-lg-4 order-first order-lg-2'>
-					<div id='table' className='carousel slide' data-ride='carousel'>
-						<div className='carousel-inner'>
-							{!!tables.length ? (
-								tables.map((table, i) => (
-									<div
-										className={
-											i === 0 ? "carousel-item active" : "carousel-item"
-										}
-									>
-										<TableView
-											key={table.table_id}
-											table={table}
-											finishButtonHandler={finishButtonHandler}
-											deleteTableHandler={deleteTableHandler}
-										/>
-									</div>
-								))
-							) : (
-								<Empty />
-							)}
-						</div>
-					</div>
+				<div className='col-lg-4 order-first order-lg-2  mt-3'>
+					{!!tables.length ? (
+						tables.map((table) => (
+							<TableView
+								key={table.table_id}
+								table={table}
+								finishButtonHandler={finishButtonHandler}
+								deleteTableHandler={deleteTableHandler}
+							/>
+						))
+					) : (
+						<Empty />
+					)}
 				</div>
 			</section>
 		</main>
