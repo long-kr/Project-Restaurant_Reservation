@@ -50,7 +50,12 @@ describe("US-01 - Create and list reservations", () => {
 	});
 
 	describe("POST /reservations", () => {
-		const bookedDate = moment().add(1, "day").format("YYYY-MM-DD");
+		// If today is a Monday, set bookedDate to Wednesday.
+		// Otherwise, set bookedDate to tomorrow.
+		const bookedDate =
+			moment().isoWeekday() === 1
+				? moment().add(2, "days").format("YYYY-MM-DD")
+				: moment().add(1, "days").format("YYYY-MM-DD");
 
 		test("returns 400 if data is missing", async () => {
 			const response = await request(app)
