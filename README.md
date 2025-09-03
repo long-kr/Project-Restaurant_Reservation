@@ -1,5 +1,5 @@
 # Project: Reservation Management Web App
-- [Live](https://reservation-longkr.netlify.app/) (project using cheap serverless, please be patient 😄
+- [Live](https://reservation-longkr.netlify.app/) (project using cheap serverless, please be patient) 😄
 
 ## Installation
 1. Fork and clone this repository.
