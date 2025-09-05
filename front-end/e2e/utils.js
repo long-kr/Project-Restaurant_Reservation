@@ -1,3 +1,5 @@
+const { default: puppeteer } = require("puppeteer");
+
 async function selectOptionByText(page, name, optionText) {
 	const optionWaned = await page.waitForSelector(
 		`::-p-xpath(//*[@name="${name}"]/option[text()="${optionText}"])`
@@ -44,8 +46,37 @@ async function findButtonByText(page, text, options = {}) {
 	return await page.waitForSelector(xpath, options);
 }
 
+/**
+ * Get a Puppeteer Browser instance.
+ * @param {object} options - Options to pass to puppeteer.launch
+ * @return {Promise<import('puppeteer').Browser>}
+ */
+async function getBrowser(options = {}) {
+	return await puppeteer.launch({
+		executablePath: process.env.PUPPETEER_EXEC_PATH, // set by docker container
+		headless: true,
+		args: [`--no-sandbox`, `--disable-setuid-sandbox`],
+		slowMo: 50,
+		...options,
+	});
+}
+
+/**
+ * Log page console messages to Node console.
+ */
+const onPageConsole = (msg) => {
+	if (msg.type() === "error") {
+		return Promise.all(msg.args().map((event) => event.jsonValue())).then(
+			(eventJson) =>
+				console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+		);
+	}
+};
+
 module.exports = {
 	containsText,
 	selectOptionByText,
 	findButtonByText,
+	getBrowser,
+	onPageConsole,
 };
