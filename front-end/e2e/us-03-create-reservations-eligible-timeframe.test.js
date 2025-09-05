@@ -1,18 +1,8 @@
-const puppeteer = require("puppeteer");
-
 const fs = require("fs");
+const { onPageConsole, getBrowser } = require("./utils");
 const fsPromises = fs.promises;
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
-
-const onPageConsole = (msg) => {
-	if (msg.type() === "error") {
-		return Promise.all(msg.args().map((event) => event.jsonValue())).then(
-			(eventJson) =>
-				console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
-		);
-	}
-};
 
 describe("US-03 - Create reservation on a future, working date - E2E", () => {
 	let page;
@@ -23,7 +13,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
 	});
 
 	beforeEach(async () => {
-		browser = await puppeteer.launch();
+		browser = await getBrowser();
 		page = await browser.newPage();
 		page.on("console", onPageConsole);
 		await page.setViewport({ width: 1920, height: 1080 });
