@@ -5,18 +5,21 @@ const moment = require("moment");
 const checkValidation = (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		return res.status(400).json({
-			error: errors.array().map((err) => ({
-				field: err.param,
-				message: err.msg,
-			})),
-		});
+		// Group errors by field for clearer error messages
+		const errorsByField = errors.array().reduce((acc, error) => {
+			if (!acc.includes(error.msg)) {
+				acc.push(error.msg);
+			}
+			return acc;
+		}, []);
+		return res.status(400).json({ error: errorsByField });
 	}
 	next();
 };
 
 // Sanitize and validate mobile number
 const sanitizeMobileNumber = (number) => {
+	if (!number) return "";
 	// Remove all non-numeric characters
 	const cleaned = number.replace(/\D/g, "");
 	// Format as XXX-XXX-XXXX
@@ -25,102 +28,151 @@ const sanitizeMobileNumber = (number) => {
 
 // Common validation rules for reservations
 const reservationValidationRules = [
-	body("data.first_name")
-		.trim()
+	// Data object validation
+	body("data")
+		.exists()
+		.withMessage("data")
 		.notEmpty()
-		.withMessage("First name is required")
+		.withMessage("data")
+		.isObject()
+		.withMessage("data"),
+
+	// Basic field validations
+	body("data.first_name")
+		.exists()
+		.withMessage("first_name")
+		.notEmpty()
+		.withMessage("first_name")
 		.isLength({ min: 2 })
-		.withMessage("First name must be at least 2 characters long")
-		.escape(),
+		.withMessage("first_name"),
 
 	body("data.last_name")
-		.trim()
+		.exists()
+		.withMessage("last_name")
 		.notEmpty()
-		.withMessage("Last name is required")
+		.withMessage("last_name")
 		.isLength({ min: 2 })
-		.withMessage("Last name must be at least 2 characters long")
-		.escape(),
+		.withMessage("last_name"),
 
 	body("data.mobile_number")
-		.trim()
+		.exists()
+		.withMessage("mobile_number")
 		.notEmpty()
-		.withMessage("Mobile number is required")
+		.withMessage("mobile_number")
 		.custom((value) => {
-			// Remove any non-numeric characters for validation
 			const numericValue = value.replace(/\D/g, "");
 			if (numericValue.length !== 10) {
-				throw new Error("Mobile number must be exactly 10 digits");
+				throw new Error("mobile_number");
 			}
 			return true;
 		})
 		.customSanitizer(sanitizeMobileNumber),
 
+	// People validation (must come before business rules)
 	body("data.people")
+		.exists()
+		.withMessage("people")
+		.notEmpty()
+		.withMessage("people")
+		.custom((value) => {
+			if (typeof value === "string") {
+				throw new Error("people");
+			}
+			return true;
+		})
 		.isInt({ min: 1 })
-		.withMessage("Number of people must be a positive integer")
+		.withMessage("people")
 		.toInt(),
 
+	// Date/time format validation
 	body("data.reservation_date")
+		.exists()
+		.withMessage("reservation_date")
 		.notEmpty()
-		.withMessage("Reservation date is required")
+		.withMessage("reservation_date")
 		.matches(/^\d{4}-\d{2}-\d{2}$/)
-		.withMessage("Reservation date must be in YYYY-MM-DD format")
-		.custom((value) => {
-			const date = moment(value);
-			if (!date.isValid()) {
-				throw new Error("Invalid reservation date");
-			}
-			if (date.isBefore(moment().startOf("day"))) {
-				throw new Error("Reservation date must be in the future");
-			}
-			if (date.day() === 2) {
-				// Tuesday
-				throw new Error("Restaurant is closed on Tuesdays");
-			}
-			return true;
-		}),
+		.withMessage("reservation_date"),
 
 	body("data.reservation_time")
+		.exists()
+		.withMessage("reservation_time")
 		.notEmpty()
-		.withMessage("Reservation time is required")
+		.withMessage("reservation_time")
 		.matches(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/)
-		.withMessage("Reservation time must be in HH:MM format")
-		.custom((value, { req }) => {
-			const date = moment(req.body.data.reservation_date);
-			const time = moment(value, "HH:mm");
-			const dateTime = date.clone().hours(time.hours()).minutes(time.minutes());
+		.withMessage("reservation_time"),
 
-			const openingTime = date.clone().hours(10).minutes(30);
-			const closingTime = date.clone().hours(21).minutes(30);
-			const lastSeatingTime = date.clone().hours(20).minutes(30);
-
-			if (dateTime.isBefore(openingTime)) {
-				throw new Error("Restaurant is not open until 10:30 AM");
+	// Status validation
+	body("data.status")
+		.optional()
+		.custom((value) => {
+			if (value === "seated" || value === "finished") {
+				throw new Error(value);
 			}
-			if (dateTime.isAfter(closingTime)) {
-				throw new Error("Restaurant closes at 9:30 PM");
+			if (value && value !== "booked") {
+				throw new Error("unknown");
 			}
-			if (dateTime.isAfter(lastSeatingTime)) {
-				throw new Error("Last seating is at 8:30 PM");
-			}
-
-			// If reservation is for today, check if time has already passed
-			if (date.isSame(moment(), "day") && dateTime.isBefore(moment())) {
-				throw new Error("Reservation time must be in the future");
-			}
-
 			return true;
 		}),
+
+	// Business rules validation
+	body("data.reservation_date").custom((value) => {
+		const date = moment(value, "YYYY-MM-DD", true);
+		if (!date.isValid()) {
+			throw new Error("reservation_date");
+		}
+		if (date.isBefore(moment().startOf("day"))) {
+			throw new Error("future");
+		}
+		if (date.day() === 2) {
+			throw new Error("closed");
+		}
+		return true;
+	}),
+
+	body("data.reservation_time").custom((value, { req }) => {
+		const date = moment(req.body.data.reservation_date, "YYYY-MM-DD");
+		const time = moment(value, "HH:mm");
+		const dateTime = date.clone().hours(time.hours()).minutes(time.minutes());
+
+		const openingTime = date.clone().hours(10).minutes(30);
+		const closingTime = date.clone().hours(21).minutes(30);
+		const lastSeatingTime = date.clone().hours(20).minutes(30);
+
+		if (dateTime.isBefore(openingTime)) {
+			throw new Error("reservation_time");
+		}
+		if (dateTime.isAfter(closingTime)) {
+			throw new Error("reservation_time");
+		}
+		if (dateTime.isAfter(lastSeatingTime)) {
+			throw new Error("reservation_time");
+		}
+
+		if (date.isSame(moment(), "day") && dateTime.isBefore(moment())) {
+			throw new Error("reservation_time");
+		}
+
+		return true;
+	}),
 ];
 
 // Validation rules for updating reservation status
 const statusValidationRules = [
-	body("data.status")
-		.trim()
+	body("data")
+		.exists()
+		.withMessage("data")
 		.notEmpty()
-		.withMessage("Status is required")
+		.withMessage("data")
+		.isObject()
+		.withMessage("data"),
+
+	body("data.status")
+		.exists()
+		.withMessage("status")
+		.notEmpty()
+		.withMessage("status")
 		.isIn(["booked", "seated", "finished", "cancelled"])
-		.withMessage("Invalid status"),
+		.withMessage("unknown"),
 ];
 
 // Validation rules for searching reservations
@@ -133,7 +185,14 @@ const searchValidationRules = [
 	query("date")
 		.optional()
 		.matches(/^\d{4}-\d{2}-\d{2}$/)
-		.withMessage("Date must be in YYYY-MM-DD format"),
+		.withMessage("Date must be in YYYY-MM-DD format")
+		.custom((value) => {
+			const date = moment(value, "YYYY-MM-DD", true);
+			if (!date.isValid()) {
+				throw new Error("Invalid date format");
+			}
+			return true;
+		}),
 ];
 
 module.exports = {

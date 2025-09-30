@@ -6,6 +6,13 @@ const { hasProperties } = require("../util/helper");
 /**
  * Validation input data
  */
+function hasData(req, res, next) {
+	if (!req.body.data) {
+		return res.status(400).json({ error: "data" });
+	}
+	next();
+}
+
 async function tableExist(req, res, next) {
 	const { table_id } = req.params;
 	const table = await service.read(table_id);
@@ -22,7 +29,15 @@ async function tableExist(req, res, next) {
 }
 
 async function reservartionExist(req, res, next) {
-	const { reservation_id } = req.body.data;
+	const { data } = req.body;
+	if (!data || !data.reservation_id) {
+		return next({
+			status: 400,
+			message: "reservation_id is required",
+		});
+	}
+
+	const { reservation_id } = data;
 	const reservation = await reservartionService.read(reservation_id);
 
 	if (!reservation) {
@@ -63,9 +78,8 @@ function validCapacity(req, res, next) {
 }
 
 function validReservaionId(req, res, next) {
-	const { reservation_id } = req.body.data;
-
-	if (!reservation_id) {
+	const { data } = req.body;
+	if (!data || !data.reservation_id) {
 		return next({
 			status: 400,
 			message: `must have reservation_id to assign seat`,
@@ -77,6 +91,12 @@ function validReservaionId(req, res, next) {
 
 function validUpdateProperty(req, res, next) {
 	const { data } = req.body;
+	if (!data) {
+		return next({
+			status: 400,
+			message: "data is required",
+		});
+	}
 
 	const invalidField = Object.keys(data).filter((key) => {
 		return key !== "reservation_id";
@@ -144,24 +164,25 @@ function isReservationSeated(req, res, next) {
 
 	next();
 }
+
 /**
  * GET handler for table resources
  */
-async function list(req, res, next) {
+async function list(req, res) {
 	res.json({ data: await service.list() });
 }
 
 /**
  * GET handler for table resources
  */
-async function read(req, res, next) {
+async function read(req, res) {
 	res.json({ data: res.locals.table });
 }
 
 /**
  * POST handler for table resources
  */
-async function create(req, res, next) {
+async function create(req, res) {
 	const newTable = await service.create(req.body.data);
 
 	res.status(201).json({
@@ -172,7 +193,7 @@ async function create(req, res, next) {
 /**
  * PUT handler for table resources
  */
-async function update(req, res, next) {
+async function update(req, res) {
 	const updateTable = {
 		...req.body.data,
 		table_id: res.locals.table.table_id,
@@ -185,7 +206,7 @@ async function update(req, res, next) {
 /**
  * DELETE handler for free a table
  */
-async function destroy(req, res, next) {
+async function destroy(req, res) {
 	const deleted = await service.destroy(res.locals.table);
 	res.status(200).json("freed");
 }
@@ -206,18 +227,20 @@ async function destroyTable(req, res, next) {
 }
 
 module.exports = {
-	list,
+	list: [asyncErrorBoundary(list)],
 	read: [asyncErrorBoundary(tableExist), asyncErrorBoundary(read)],
 	create: [
+		hasData,
 		hasProperties(["table_name", "capacity"]),
 		validTableName,
 		validCapacity,
 		asyncErrorBoundary(create),
 	],
 	update: [
-		asyncErrorBoundary(tableExist),
+		hasData,
 		validReservaionId,
 		asyncErrorBoundary(reservartionExist),
+		asyncErrorBoundary(tableExist),
 		validUpdateProperty,
 		maxPeople,
 		isTableFree,

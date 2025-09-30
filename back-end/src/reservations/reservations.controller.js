@@ -12,6 +12,13 @@ const {
 /**
  * Validation input data
  */
+function hasData(req, res, next) {
+	if (!req.body.data) {
+		return res.status(400).json({ error: "data" });
+	}
+	next();
+}
+
 async function reservationExist(req, res, next) {
 	const { reservation_id } = req.params;
 
@@ -29,6 +36,7 @@ async function reservationExist(req, res, next) {
 }
 
 function isSeated(req, res, next) {
+	if (!req.body.data) return next();
 	const { status } = req.body.data;
 	if (status === "seated") {
 		return next({
@@ -36,11 +44,11 @@ function isSeated(req, res, next) {
 			message: `Reservation is already seated`,
 		});
 	}
-
 	next();
 }
 
 function isFinished(req, res, next) {
+	if (!req.body.data) return next();
 	const { status } = req.body.data;
 	if (status === "finished") {
 		return next({
@@ -48,7 +56,6 @@ function isFinished(req, res, next) {
 			message: `Reservation is already finished`,
 		});
 	}
-
 	next();
 }
 
@@ -116,6 +123,7 @@ async function update(req, res) {
 module.exports = {
 	list: [searchValidationRules, checkValidation, asyncErrorBoundary(list)],
 	create: [
+		hasData,
 		reservationValidationRules,
 		checkValidation,
 		isSeated,
@@ -124,6 +132,7 @@ module.exports = {
 	],
 	read: [asyncErrorBoundary(reservationExist), asyncErrorBoundary(read)],
 	update: [
+		hasData,
 		asyncErrorBoundary(reservationExist),
 		reservationValidationRules,
 		checkValidation,
@@ -132,6 +141,7 @@ module.exports = {
 		asyncErrorBoundary(update),
 	],
 	updateStatus: [
+		hasData,
 		asyncErrorBoundary(reservationExist),
 		statusValidationRules,
 		checkValidation,
