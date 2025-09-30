@@ -14,7 +14,11 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
+    "start:prod": "NODE_ENV=production node src/server.js",
+    "dev": "nodemon --inspect src/server.js",
     "test": "npx cross-env LOG_LEVEL=warn jest --runInBand --detectOpenHandles --forceExit --config ./test/jest.config.js",
+    "test:watch": "npm run test -- --watch",
+    "test:coverage": "npm run test -- --coverage",
     "test:1": "npm run test -- us-01",
     "test:2": "npm run test -- us-02",
     "test:3": "npm run test -- us-03",
@@ -26,11 +30,22 @@
     "test:drop-database": "node test/drop-database",
     "test:start": "npx cross-env LOG_LEVEL=warn NODE_ENV=test npm run test:start:run",
     "test:start:run": "run-s test:drop-database start",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "lint:test": "eslint test/",
+    "format": "prettier --write \"src/**/*.js\" \"test/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"test/**/*.js\"",
+    "code:check": "npm run lint && npm run format:check",
+    "code:fix": "npm run lint:fix && npm run format",
     "knex": "knex",
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
+    "migrate:make": "knex migrate:make",
+    "seed:make": "knex seed:make",
     "reset": "npm run migrate:rollback && npm run migrate && npm run seed",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "db:setup": "npm run migrate && npm run seed",
+    "health": "curl -f http://localhost:5001/health || exit 1"
   },
   "keywords": [],
   "author": "",
@@ -51,8 +66,13 @@
     "starter-restaurant-reservation-back-end": "file:"
   },
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jest": "29.7.0",
     "nodemon": "3.0.1",
+    "prettier": "^3.6.2",
     "supertest": "6.3.3"
   }
 }

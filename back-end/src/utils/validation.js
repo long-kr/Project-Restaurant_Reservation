@@ -1,4 +1,4 @@
-const { body, param, query, validationResult } = require("express-validator");
+const { body, query, validationResult } = require("express-validator");
 const moment = require("moment");
 
 // Validation middleware to check results
@@ -19,7 +19,9 @@ const checkValidation = (req, res, next) => {
 
 // Sanitize and validate mobile number
 const sanitizeMobileNumber = (number) => {
-	if (!number) return "";
+	if (!number) {
+		return "";
+	}
 	// Remove all non-numeric characters
 	const cleaned = number.replace(/\D/g, "");
 	// Format as XXX-XXX-XXXX
