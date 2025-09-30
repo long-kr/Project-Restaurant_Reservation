@@ -1,6 +1,7 @@
 const service = require("./tables.service");
 const reservartionService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { hasProperties } = require("../util/helper");
 
 /**
  * Validation input data
@@ -33,32 +34,6 @@ async function reservartionExist(req, res, next) {
 
 	res.locals.reservation = reservation;
 	next();
-}
-
-function hasData(req, res, next) {
-	if (!req.body.data) {
-		return next({
-			status: 400,
-			message: `Request body must have data`,
-		});
-	}
-
-	next();
-}
-
-function hasProperties(propertyName) {
-	return (req, res, next) => {
-		const { data } = req.body;
-
-		if (!data[propertyName]) {
-			return next({
-				status: 400,
-				message: `Request must have property: ${propertyName}`,
-			});
-		}
-
-		next();
-	};
 }
 
 function validTableName(req, res, next) {
@@ -234,16 +209,13 @@ module.exports = {
 	list,
 	read: [asyncErrorBoundary(tableExist), asyncErrorBoundary(read)],
 	create: [
-		hasData,
-		hasProperties("table_name"),
-		hasProperties("capacity"),
+		hasProperties(["table_name", "capacity"]),
 		validTableName,
 		validCapacity,
 		asyncErrorBoundary(create),
 	],
 	update: [
 		asyncErrorBoundary(tableExist),
-		hasData,
 		validReservaionId,
 		asyncErrorBoundary(reservartionExist),
 		validUpdateProperty,
