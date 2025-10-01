@@ -5,6 +5,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "./dashboard/Dashboard";
 
 import React from "react";
+import { ErrorBoundary, ErrorPage } from "./components/error";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/layout/NotFound";
 import ReservationCreate from "./reservations/ReservationCreate";
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <Layout />,
-		// errorElement: <ErrorPage />,
+		errorElement: <ErrorPage />,
 		children: [
 			{ index: true, element: <Dashboard /> },
 			...[routes.dashboard, routes.reservations].map((path) => ({
@@ -48,10 +49,12 @@ const router = createBrowserRouter([
 
 function App() {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider future={{ v7_startTransition: true }} router={router} />
-			<ReactQueryDevtools initialIsOpen={false} />
-		</QueryClientProvider>
+		<ErrorBoundary>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider future={{ v7_startTransition: true }} router={router} />
+				<ReactQueryDevtools initialIsOpen={false} />
+			</QueryClientProvider>
+		</ErrorBoundary>
 	);
 }
 

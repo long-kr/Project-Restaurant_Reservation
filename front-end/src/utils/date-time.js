@@ -81,3 +81,56 @@ export function next(currentDate) {
 	date.setDate(date.getDate() + 1);
 	return asDateString(date);
 }
+
+/**
+ * Get the week day of the specified date.
+ * @param input
+ *  a date string in YYYY-MM-DD format
+ * @returns {*}
+ *  the week day of the specified date
+ */
+export function getWeekDay(input) {
+	const dateArray = input.split("-");
+	const year = dateArray[0];
+	const month = parseInt(dateArray[1], 10) - 1;
+	const date = dateArray[2];
+	const newDate = new Date(year, month, date);
+	return newDate.getDay();
+}
+
+/**
+ * Check if the reservation time is valid.
+ * @param timeInput
+ *  a time string in HH:MM format
+ * @returns {*}
+ *  true if the reservation time is valid, false otherwise
+ */
+export function isReservationTimeValid(timeInput) {
+	const openTime = new Date().setHours(10, 30, 0);
+	const closedTime = new Date().setHours(21, 30, 0);
+	const hourInput = Number(timeInput.split(":")[0]);
+	const minusInput = Number(timeInput.split(":")[1]);
+	const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+
+	return reserveTime >= openTime && reserveTime <= closedTime;
+}
+
+/**
+ * Check if the reservation time is not past the current time.
+ * @param timeInput
+ *  a time string in HH:MM format
+ * @param dateInput
+ *  a date string in YYYY-MM-DD format
+ * @returns {*}
+ *  true if the reservation time is not past the current time, false otherwise
+ */
+export function isNotPastTime(timeInput, dateInput) {
+	if (dateInput !== today()) return true;
+
+	const hourInput = Number(timeInput.split(":")[0]);
+	const minusInput = Number(timeInput.split(":")[1]);
+	const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+	const timeNow = new Date().getTime();
+
+	return timeNow <= reserveTime;
+}
