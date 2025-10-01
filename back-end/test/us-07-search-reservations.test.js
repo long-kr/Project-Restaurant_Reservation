@@ -16,7 +16,7 @@ describe("US-07 - Search reservation by phone number", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
-		await knex.release();
+		await knex.destroy();
 	});
 
 	describe("GET /reservations?mobile_number=...", () => {
