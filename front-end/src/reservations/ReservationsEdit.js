@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
-import { getReservation, updateReservation } from "../utils/api";
+import { ErrorAlert } from "../components/layout";
+import { Loading } from "../components/ui";
+import { useReservation, useUpdateReservation } from "../hooks/useReservations";
 import { formatAsDate } from "../utils/date-time";
 import { routes } from "../utils/routes";
 import SubmitForm from "./SubmitForm";
@@ -18,22 +19,28 @@ function ReservationsEdit() {
 
 	const navigate = useNavigate();
 	const { reservation_id } = useParams();
+	const updateReservationMutation = useUpdateReservation();
+
 	const [reservation, setReservation] = useState({ ...initialReservation });
 	const [error, setError] = useState(null);
 
-	useEffect(loadReservation, [reservation_id]);
+	// Fetch reservation data using React Query
+	const {
+		data: reservationData,
+		isLoading,
+		error: fetchError,
+	} = useReservation(reservation_id);
 
-	function loadReservation() {
-		const abortController = new AbortController();
-		setError(null);
-		getReservation(reservation_id, abortController.signal)
-			.then((data) => {
-				data.reservation_date = formatAsDate(data.reservation_date);
-				setReservation(data);
-			})
-			.catch(setError);
-		return () => abortController.abort();
-	}
+	// Update local state when data is fetched
+	useEffect(() => {
+		if (reservationData) {
+			const formattedData = {
+				...reservationData,
+				reservation_date: formatAsDate(reservationData.reservation_date),
+			};
+			setReservation(formattedData);
+		}
+	}, [reservationData]);
 
 	const changeHandler = ({ target: { name, value } }) => {
 		setReservation((preReservation) => ({
@@ -44,16 +51,37 @@ function ReservationsEdit() {
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		const abortController = new AbortController();
 		setError(null);
 		reservation.people = parseInt(reservation.people);
-		updateReservation(reservation_id, reservation, abortController.signal)
-			.then(() => {
-				navigate(`${routes.dashboard}?date=${reservation.reservation_date}`);
-			})
-			.catch((errors) => setError([errors]));
-		return () => abortController.abort();
+
+		updateReservationMutation.mutate(
+			{
+				reservationId: reservation_id,
+				data: reservation,
+			},
+			{
+				onSuccess: () => {
+					navigate(`${routes.dashboard}?date=${reservation.reservation_date}`);
+				},
+				onError: (errors) => {
+					setError([errors]);
+				},
+			}
+		);
 	};
+
+	if (isLoading) {
+		return <Loading />;
+	}
+
+	if (fetchError) {
+		return (
+			<div>
+				<h4>Error loading reservation</h4>
+				<ErrorAlert error={fetchError} />
+			</div>
+		);
+	}
 
 	return (
 		<div>

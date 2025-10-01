@@ -11,7 +11,7 @@ body,
 body {
 	color: bisque;
 	font-size: larger;
-	background-image: url("../img/pic2cups.jpg");
+	background-image: url("../../assets/pic2cups.jpg");
 	background-attachment: fixed;
 	background-size: cover;
 	background-color: black;

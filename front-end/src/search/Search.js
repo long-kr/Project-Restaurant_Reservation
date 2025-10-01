@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Empty } from "../components/Empty";
+import { Empty, Loading } from "../components/ui";
+import {
+	useReservationsByPhone,
+	useUpdateReservationStatus,
+} from "../hooks/useReservations";
 import ReservationView from "../reservations/ReservationView";
-import { searchReservationsByPhone, setReservationStatus } from "../utils/api";
 import SearchForm from "./SearchForm";
 
 /**
@@ -12,29 +15,26 @@ import SearchForm from "./SearchForm";
  */
 function Search() {
 	const [phoneNumber, setPhoneNumer] = useState("");
-	const [reservations, setReservations] = useState([]);
+	const [searchTriggered, setSearchTriggered] = useState(false);
 
-	const controllerRef = useRef(null);
+	const updateReservationStatusMutation = useUpdateReservationStatus();
+
+	// Only fetch when search is triggered and phone number is provided
+	const {
+		data: reservations = [],
+		isLoading,
+		error,
+	} = useReservationsByPhone(searchTriggered ? phoneNumber : "");
 
 	const changeHandler = (e) => {
 		setPhoneNumer(e.target.value);
+		setSearchTriggered(false); // Reset search trigger when phone number changes
 	};
 
-	const submitHandler = async (e) => {
+	const submitHandler = (e) => {
 		e.preventDefault();
-
-		try {
-			const abortController = new AbortController();
-			controllerRef.current = abortController;
-
-			const reservation = await searchReservationsByPhone(
-				{ mobile_number: phoneNumber },
-				abortController.signal
-			);
-
-			setReservations(reservation);
-		} catch (error) {
-			toast.error("No reservations found for this phone number.");
+		if (phoneNumber.trim()) {
+			setSearchTriggered(true);
 		}
 	};
 
@@ -44,28 +44,17 @@ function Search() {
 				"Do you want to cancel this reservation?\nThis cannot be undone."
 			)
 		) {
-			const abortController = new AbortController();
-			controllerRef.current = abortController;
-
-			setReservationStatus(
-				reservation_id,
-				{ status: "cancelled" },
-				abortController.signal
-			)
-				.then(() => {
-					window.location.reload();
-				})
-				.catch();
+			updateReservationStatusMutation.mutate({
+				reservationId: reservation_id,
+				data: { status: "cancelled" },
+			});
 		}
 	}
-	console.log(reservations);
-	useEffect(() => {
-		return () => {
-			if (controllerRef.current) {
-				controllerRef.current.abort();
-			}
-		};
-	}, []);
+
+	// Show error toast when search fails
+	if (error && searchTriggered) {
+		toast.error("No reservations found for this phone number.");
+	}
 
 	return (
 		<div>
@@ -77,7 +66,9 @@ function Search() {
 				submitHandler={submitHandler}
 			/>
 
-			{reservations.length ? (
+			{isLoading ? (
+				<Loading />
+			) : searchTriggered && reservations.length ? (
 				<div className='py-2'>
 					{reservations.map((reservation) => (
 						<ReservationView
@@ -87,9 +78,9 @@ function Search() {
 						/>
 					))}
 				</div>
-			) : (
+			) : searchTriggered ? (
 				<Empty message='No reservations found' />
-			)}
+			) : null}
 		</div>
 	);
 }

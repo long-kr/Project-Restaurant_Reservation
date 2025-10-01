@@ -153,7 +153,7 @@ export async function searchReservationsByPhone(params, signal) {
  * @param {AbortSignal} [signal] - Signal to abort the request.
  * @returns {Promise<import('./type').Reservation>} A promise with the updated reservation information.
  */
-export async function setReservationStatus(reservation_id, data, signal) {
+export async function updateReservationStatus(reservation_id, data, signal) {
 	const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
 
 	const options = {
