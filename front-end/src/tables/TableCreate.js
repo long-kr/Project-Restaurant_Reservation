@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
-import { createTable } from "../utils/api";
+import { ErrorAlert } from "../components/layout";
+import { useCreateTable } from "../hooks/useTables";
 import SubmitForm from "./SubmitForm";
 
 const initialTable = {
@@ -11,21 +11,27 @@ const initialTable = {
 
 function TableCreate() {
 	const navigate = useNavigate();
+	const createTableMutation = useCreateTable();
 
 	const [table, setTable] = useState(initialTable);
 	const [error, setError] = useState(null);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		const abortController = new AbortController();
 		setError(null);
 		table.capacity = parseInt(table.capacity);
-		createTable(table, abortController.signal)
-			.then(() => {
-				navigate("/dashboard");
-			})
-			.catch(setError);
-		return () => abortController.abort();
+
+		createTableMutation.mutate(
+			{ table },
+			{
+				onSuccess: () => {
+					navigate("/dashboard");
+				},
+				onError: (error) => {
+					setError(error);
+				},
+			}
+		);
 	};
 
 	const changeHandler = ({ target: { name, value } }) => {

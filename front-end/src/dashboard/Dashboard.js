@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Empty } from "../components/Empty";
-import { Button } from "../components/ui/Button";
+import { Button, Empty, Loading } from "../components/ui";
+
+import {
+	useReservationsByDate,
+	useUpdateReservationStatus,
+} from "../hooks/useReservations";
+import { useDeleteTable, useTables, useUnseatTable } from "../hooks/useTables";
 import ReservationView from "../reservations/ReservationView";
 import TableView from "../tables/TableView";
-import {
-	deleteTable,
-	listReservations,
-	listTable,
-	setReservationStatus,
-	unSeatingTable,
-} from "../utils/api";
 import { next, previous, today } from "../utils/date-time";
 
 /**
@@ -22,25 +20,29 @@ import { next, previous, today } from "../utils/date-time";
 function Dashboard() {
 	const todayDateString = today();
 	const history = useLocation();
+	const queryDate = history.search
+		? history.search.slice(6, 16)
+		: todayDateString;
 
-	const [reservations, setReservations] = useState([]);
-	const [tables, setTables] = useState([]);
-	const [date, setDate] = useState(() =>
-		history.search ? history.search.slice(6, 16) : todayDateString
-	);
+	const [date, setDate] = useState(() => queryDate);
 
-	const loadDashboard = useCallback(
-		async (signal) => {
-			try {
-				const reservations = await listReservations({ date }, signal);
-				const tables = await listTable();
+	// Use React Query hooks for data fetching
+	const {
+		data: reservations = [],
+		isLoading: reservationsLoading,
+		error: reservationsError,
+	} = useReservationsByDate(date);
 
-				setReservations(reservations);
-				setTables(tables);
-			} catch (error) {}
-		},
-		[date]
-	);
+	const {
+		data: tables = [],
+		isLoading: tablesLoading,
+		error: tablesError,
+	} = useTables();
+
+	// Mutation hooks
+	const updateReservationStatusMutation = useUpdateReservationStatus();
+	const unseatTableMutation = useUnseatTable();
+	const deleteTableMutation = useDeleteTable();
 
 	const previousButtonHandler = () => {
 		setDate(previous(date.toString()));
@@ -60,9 +62,7 @@ function Dashboard() {
 				"Is this table ready to seat new guests?\nThis cannot be undone."
 			)
 		) {
-			unSeatingTable(table_id)
-				.then(() => loadDashboard())
-				.catch();
+			unseatTableMutation.mutate({ tableId: table_id });
 		}
 	}
 
@@ -72,9 +72,7 @@ function Dashboard() {
 				"Are you sure to delete this table?\nThis cannot be undone."
 			)
 		) {
-			deleteTable(table_id)
-				.then(() => loadDashboard())
-				.catch();
+			deleteTableMutation.mutate({ tableId: table_id });
 		}
 	}
 
@@ -84,27 +82,26 @@ function Dashboard() {
 				"Do you want to cancel this reservation?\nThis cannot be undone."
 			)
 		) {
-			const abortController = new AbortController();
-			setReservationStatus(
-				reservation_id,
-				{ status: "cancelled" },
-				abortController.signal
-			)
-				.then(() => {
-					window.location.reload();
-				})
-				.catch();
-			return () => abortController.abort();
+			updateReservationStatusMutation.mutate({
+				reservationId: reservation_id,
+				data: { status: "cancelled" },
+			});
 		}
 	}
 
-	useEffect(() => {
-		const abortController = new AbortController();
-		loadDashboard(abortController.signal);
-		return () => {
-			abortController.abort();
-		};
-	}, [loadDashboard]);
+	// Loading and error states
+	const isLoading = reservationsLoading || tablesLoading;
+	const hasError = reservationsError || tablesError;
+
+	if (hasError) {
+		return (
+			<main>
+				<div className='alert alert-danger'>
+					Error loading dashboard data. Please try again.
+				</div>
+			</main>
+		);
+	}
 
 	return (
 		<main>
@@ -126,38 +123,42 @@ function Dashboard() {
 				</Button>
 			</div>
 
-			<section className='row justify-content-between'>
-				<div className='col-lg-8'>
-					{reservations.length ? (
-						<div className='py-2'>
-							{reservations.map((reservation) => (
-								<ReservationView
-									key={reservation.reservation_id}
-									reservation={reservation}
-									cancelHandler={cancelReservationHandler}
-								/>
-							))}
-						</div>
-					) : (
-						<Empty />
-					)}
-				</div>
+			{isLoading ? (
+				<Loading />
+			) : (
+				<section className='row justify-content-between'>
+					<div className='col-lg-8'>
+						{reservations.length ? (
+							<div className='py-2'>
+								{reservations.map((reservation) => (
+									<ReservationView
+										key={reservation.reservation_id}
+										reservation={reservation}
+										cancelHandler={cancelReservationHandler}
+									/>
+								))}
+							</div>
+						) : (
+							<Empty />
+						)}
+					</div>
 
-				<div className='col-lg-4 order-first order-lg-2  mt-3'>
-					{!!tables.length ? (
-						tables.map((table) => (
-							<TableView
-								key={table.table_id}
-								table={table}
-								finishButtonHandler={finishButtonHandler}
-								deleteTableHandler={deleteTableHandler}
-							/>
-						))
-					) : (
-						<Empty />
-					)}
-				</div>
-			</section>
+					<div className='col-lg-4 order-first order-lg-2  mt-3'>
+						{!!tables.length ? (
+							tables.map((table) => (
+								<TableView
+									key={table.table_id}
+									table={table}
+									finishButtonHandler={finishButtonHandler}
+									deleteTableHandler={deleteTableHandler}
+								/>
+							))
+						) : (
+							<Empty />
+						)}
+					</div>
+				</section>
+			)}
 		</main>
 	);
 }

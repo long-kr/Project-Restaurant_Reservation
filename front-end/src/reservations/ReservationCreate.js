@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
-import { createReservation } from "../utils/api";
+import { ErrorAlert } from "../components/layout";
+import { useCreateReservation } from "../hooks/useReservations";
 import { today } from "../utils/date-time";
 import SubmitForm from "./SubmitForm";
 
@@ -68,13 +68,13 @@ const timeHandler = (dateInput, timeInput, setError) => {
 
 function ReservationCreate() {
 	const navigate = useNavigate();
+	const createReservationMutation = useCreateReservation();
 
 	const [reservation, setReservation] = useState({ ...initialReservation });
 	const [error, setError] = useState([]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		const abortController = new AbortController();
 		reservation.people = parseInt(reservation.people);
 
 		const closedDatesCheck = timeHandler(
@@ -85,11 +85,17 @@ function ReservationCreate() {
 
 		if (closedDatesCheck) return;
 
-		createReservation(reservation, abortController.signal)
-			.then(() => {
-				navigate(`/dashboard?date=${reservation.reservation_date}`);
-			})
-			.catch((errors) => setError([errors]));
+		createReservationMutation.mutate(
+			{ reservation },
+			{
+				onSuccess: () => {
+					navigate(`/dashboard?date=${reservation.reservation_date}`);
+				},
+				onError: (errors) => {
+					setError([errors]);
+				},
+			}
+		);
 	};
 
 	const changeHandler = ({ target }) => {

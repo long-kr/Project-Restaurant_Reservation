@@ -1,3 +1,4 @@
+import moment from "moment";
 const dateFormat = /\d\d\d\d-\d\d-\d\d/;
 const timeFormat = /\d\d:\d\d/;
 
@@ -46,7 +47,7 @@ export function formatAsTime(timeString) {
  *  the today's date formatted as YYYY-MM-DD
  */
 export function today() {
-	return asDateString(new Date());
+	return moment().format("YYYY-MM-DD");
 }
 
 /**
