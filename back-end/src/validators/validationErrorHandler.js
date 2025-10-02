@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { ERROR_CODES } = require("../errors/AppError");
 
 /**
  * Standardized validation error response structure
@@ -8,25 +9,6 @@ const { validationResult } = require("express-validator");
  * @property {string} code - Error code for programmatic handling
  * @property {*} value - The invalid value that was provided
  */
-
-/**
- * Validation error codes for consistent frontend handling
- */
-const VALIDATION_ERROR_CODES = {
-	REQUIRED: "REQUIRED",
-	INVALID_FORMAT: "INVALID_FORMAT",
-	INVALID_TYPE: "INVALID_TYPE",
-	TOO_SHORT: "TOO_SHORT",
-	TOO_LONG: "TOO_LONG",
-	INVALID_RANGE: "INVALID_RANGE",
-	BUSINESS_RULE: "BUSINESS_RULE",
-	INVALID_DATE: "INVALID_DATE",
-	INVALID_TIME: "INVALID_TIME",
-	PAST_DATE: "PAST_DATE",
-	CLOSED_DAY: "CLOSED_DATE",
-	INVALID_PHONE: "INVALID_PHONE",
-	INVALID_STATUS: "INVALID_STATUS",
-};
 
 /**
  * Field-specific error message mappings
@@ -94,70 +76,15 @@ const BUSINESS_RULE_MESSAGES = {
  * @returns {ValidationError} Standardized validation error
  */
 function parseValidationError(error) {
-	const { param, msg, value } = error;
+	const { msg, value, path } = error;
 
-	// Extract field name (remove 'data.' prefix if present)
-	let field = param ? param.replace(/^data\./, "") : "unknown";
-
-	// Handle special case where param might be undefined
-	if (!param && msg) {
-		// Try to extract field name from the message
-		if (msg.includes("first_name")) {
-			field = "first_name";
-		} else if (msg.includes("last_name")) {
-			field = "last_name";
-		} else if (msg.includes("mobile_number")) {
-			field = "mobile_number";
-		} else if (msg.includes("reservation_date")) {
-			field = "reservation_date";
-		} else if (msg.includes("reservation_time")) {
-			field = "reservation_time";
-		} else if (msg.includes("people")) {
-			field = "people";
-		} else if (msg.includes("status")) {
-			field = "status";
-		}
-	}
-
-	// Determine error code based on message content
-	let code = VALIDATION_ERROR_CODES.INVALID_FORMAT;
+	let field = path === "data" ? "data" : path.split(".")[1] || "unknown";
 	let message = msg || "Invalid value";
-
-	// Map common error patterns to codes
-	if (msg && (msg.includes("required") || msg.includes("must be provided"))) {
-		code = VALIDATION_ERROR_CODES.REQUIRED;
-	} else if (msg && msg.includes("future")) {
-		code = VALIDATION_ERROR_CODES.PAST_DATE;
-	} else if (msg && msg.includes("closed")) {
-		code = VALIDATION_ERROR_CODES.CLOSED_DAY;
-	} else if (
-		msg &&
-		(msg.includes("business hours") || msg.includes("reservation_time"))
-	) {
-		code = VALIDATION_ERROR_CODES.BUSINESS_RULE;
-	} else if (msg && (msg.includes("phone") || msg.includes("mobile_number"))) {
-		code = VALIDATION_ERROR_CODES.INVALID_PHONE;
-	} else if (msg && msg.includes("people") && msg.includes("number")) {
-		code = VALIDATION_ERROR_CODES.INVALID_TYPE;
-	} else if (
-		msg &&
-		msg.includes("people") &&
-		(msg.includes("between") || msg.includes("1 and 20"))
-	) {
-		code = VALIDATION_ERROR_CODES.INVALID_RANGE;
-	} else if (msg && msg.includes("status") && msg.includes("unknown")) {
-		code = VALIDATION_ERROR_CODES.INVALID_STATUS;
-	}
-
-	// Use field-specific message if available
-	if (FIELD_ERROR_MESSAGES[field] && FIELD_ERROR_MESSAGES[field][code]) {
-		message = FIELD_ERROR_MESSAGES[field][code];
-	}
 
 	return {
 		field,
 		message,
-		code,
+		code: ERROR_CODES.VALIDATION_ERROR,
 		value: value || null,
 	};
 }
@@ -175,28 +102,22 @@ function checkValidation(req, res, next) {
 		// Convert express-validator errors to standardized format
 		const validationErrors = errors.array().map(parseValidationError);
 
-		// Group errors by field for easier frontend handling
-		const errorsByField = validationErrors.reduce((acc, error) => {
-			if (!acc[error.field]) {
-				acc[error.field] = [];
-			}
-			acc[error.field].push({
+		// Create array of field errors for the response
+		const fieldErrors = validationErrors.map((error) => {
+			return {
+				field: error.field,
 				message: error.message,
 				code: error.code,
 				value: error.value,
-			});
-			return acc;
-		}, {});
+			};
+		});
 
 		// Create standardized error response
 		const errorResponse = {
-			error: "Validation failed",
+			error: ERROR_CODES.VALIDATION_ERROR,
 			message: "Please check the following fields and try again",
 			statusCode: 400,
-			validation: {
-				errors: errorsByField,
-				summary: validationErrors.map((e) => e.message),
-			},
+			validation: fieldErrors,
 		};
 
 		return res.status(400).json(errorResponse);
@@ -226,7 +147,6 @@ function createValidationError(field, code, value = null) {
 module.exports = {
 	checkValidation,
 	createValidationError,
-	VALIDATION_ERROR_CODES,
 	FIELD_ERROR_MESSAGES,
 	BUSINESS_RULE_MESSAGES,
 };

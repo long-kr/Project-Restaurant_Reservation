@@ -16,7 +16,7 @@ const {
  */
 function hasData(req, res, next) {
 	if (!req.body.data) {
-		return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: "data" });
+		next(ErrorFactory.badRequest("Request body must contain a data object"));
 	}
 	next();
 }
@@ -48,7 +48,7 @@ function validTableName(req, res, next) {
 	const { table_name } = req.body.data;
 
 	if (!table_name || table_name.trim().length < 2) {
-		throw ErrorFactory.badRequest(
+		throw ErrorFactory.validation(
 			"table_name must be at least 2 characters long"
 		);
 	}
@@ -63,7 +63,7 @@ function validCapacity(req, res, next) {
 	const { capacity } = req.body.data;
 
 	if (!capacity || capacity < 1) {
-		throw ErrorFactory.badRequest("capacity must be a positive integer");
+		throw ErrorFactory.validation("capacity must be a positive integer");
 	}
 
 	next();
@@ -125,7 +125,7 @@ function sufficientCapacity(req, res, next) {
 	const reservation = res.locals.reservation;
 
 	if (table.capacity < reservation.people) {
-		throw ErrorFactory.badRequest(
+		throw ErrorFactory.validation(
 			`Table capacity (${table.capacity}) is insufficient for party size (${reservation.people})`
 		);
 	}
@@ -261,12 +261,17 @@ async function finish(req, res) {
 		// Get the reservation to update its status
 		if (table.reservation_id) {
 			const reservation = await reservationService.read(table.reservation_id);
-			if (reservation) {
-				await reservationService.update({
-					...reservation,
-					status: RESERVATION_STATUS.FINISHED,
-				});
+
+			if (!reservation) {
+				throw ErrorFactory.notFound(
+					`Reservation ${table.reservation_id} not found`
+				);
 			}
+
+			await reservationService.update({
+				...reservation,
+				status: RESERVATION_STATUS.FINISHED,
+			});
 		}
 
 		// Clear the table
