@@ -1,40 +1,46 @@
+import { Button } from '../components/ui';
+
 function TableView({ table, finishButtonHandler, deleteTableHandler }) {
   return (
-    <div className="mb-2">
-      <div className="card bg-dark">
-        <div style={{ fontFamily: 'Baskervville' }} className="card-header">
-          Table: {table.table_name}
-        </div>
+    <div className="mb-2 card rounded-0 bg-transparent">
+      <div className="card-header bg-dark p-2 d-flex justify-content-between">
+        <p style={{ fontFamily: 'Times New Roman' }} className="card-text m-0">
+          TABLE: {table.table_name}
+        </p>
+
+        <p className="card-text m-0" data-table-id-status={`${table.table_id}`}>
+          STATUS: {(table.reservation_id ? 'Occupied' : 'Free').toUpperCase()}
+        </p>
       </div>
 
-      <div className="card-body light-background">
-        <p className="card-text" data-table-id-status={`${table.table_id}`}>
-          Status: {table.reservation_id ? 'Occupied' : 'Free'}
-        </p>
+      <div
+        style={{ backgroundColor: 'rgba(71, 71, 71, 0.8)' }}
+        className="card-body p-2"
+      >
         <p className="card-text">Capacity: {table.capacity}</p>
         <p className="card-text">Reservation ID: {table.reservation_id}</p>
       </div>
 
-      <div className="d-flex justify-content-between card-footer bg-dark">
+      <div className="d-flex justify-content-between card-footer bg-dark p-1">
         <div>
           {table.reservation_id && (
-            <button
+            <Button
               data-table-id-finish={table.table_id}
-              className="btn btn-dark"
+              variant="dark"
               onClick={() => finishButtonHandler(table.table_id)}
             >
               Finish
-            </button>
+            </Button>
           )}
         </div>
 
         <div>
-          <button
-            className="btn btn-dark"
+          <Button
+            variant="dark"
             onClick={() => deleteTableHandler(table.table_id)}
           >
             Delete
-          </button>
+          </Button>
         </div>
       </div>
     </div>

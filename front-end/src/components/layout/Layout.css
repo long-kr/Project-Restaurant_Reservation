@@ -14,7 +14,7 @@ body {
   background-image: url('../../assets/pic2cups.jpg');
   background-attachment: fixed;
   background-size: cover;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   overflow-y: scroll;
   overflow-x: hidden;
   background-blend-mode: darken;
@@ -44,11 +44,6 @@ a {
 .main-background {
   height: 100%;
   margin-top: 6rem;
-  background-color: rgba(71, 71, 71, 0.336);
-}
-
-.light-background {
-  background-color: rgba(71, 71, 71, 0.8);
 }
 
 .navbar {

@@ -141,15 +141,16 @@ function Dashboard() {
             )}
           </div>
 
-          <div className="col-lg-4 order-first order-lg-2">
+          <div className="col-lg-4 order-first order-lg-2 row">
             {!!tables.length ? (
               tables.map(table => (
-                <TableView
-                  key={table.table_id}
-                  table={table}
-                  finishButtonHandler={finishButtonHandler}
-                  deleteTableHandler={deleteTableHandler}
-                />
+                <div className="col-lg-12 col-sm-6" key={table.table_id}>
+                  <TableView
+                    table={table}
+                    finishButtonHandler={finishButtonHandler}
+                    deleteTableHandler={deleteTableHandler}
+                  />
+                </div>
               ))
             ) : (
               <Empty />

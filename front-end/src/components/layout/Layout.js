@@ -10,8 +10,8 @@ import Menu from './Menu';
  */
 function Layout() {
   return (
-    <div className="container-fuild h-100">
-      <div className="row h-100">
+    <div className="container-fuild">
+      <div className="row">
         <Menu />
 
         <Header />
