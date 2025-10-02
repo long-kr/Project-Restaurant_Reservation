@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import React from "react";
+import clsx from 'clsx';
+import React from 'react';
 
 /**
  * Reusable Input component with validation support
@@ -23,85 +23,85 @@ import React from "react";
  * @param {Object} props.rest - Additional props passed to input element
  */
 export function Input({
-	type = "text",
-	name,
-	id,
-	label,
-	placeholder,
-	value,
-	onChange,
-	onBlur,
-	required = false,
-	disabled = false,
-	readOnly = false,
-	className,
-	error,
-	helpText,
-	size,
-	validation,
-	...rest
+  type = 'text',
+  name,
+  id,
+  label,
+  placeholder,
+  value,
+  onChange,
+  onBlur,
+  required = false,
+  disabled = false,
+  readOnly = false,
+  className,
+  error,
+  helpText,
+  size,
+  validation,
+  ...rest
 }) {
-	// Use validation prop if provided, otherwise use error prop
-	const hasError = error || (validation && !validation.isValid);
-	const errorMessage = error || (validation && validation.message);
+  // Use validation prop if provided, otherwise use error prop
+  const hasError = error || (validation && !validation.isValid);
+  const errorMessage = error || (validation && validation.message);
 
-	const inputClasses = clsx(
-		"form-control",
-		{
-			"is-invalid": hasError,
-			"is-valid": validation && validation.isValid && value,
-			"form-control-sm": size === "sm",
-			"form-control-lg": size === "lg",
-		},
-		className
-	);
+  const inputClasses = clsx(
+    'form-control',
+    {
+      'is-invalid': hasError,
+      'is-valid': validation && validation.isValid && value,
+      'form-control-sm': size === 'sm',
+      'form-control-lg': size === 'lg',
+    },
+    className
+  );
 
-	const inputId = id || name;
+  const inputId = id || name;
 
-	return (
-		<div className='mb-3'>
-			{label && (
-				<label htmlFor={inputId} className='form-label'>
-					<p>
-						{label}: {required && <span className='text-danger ms-1'>*</span>}
-					</p>
-				</label>
-			)}
+  return (
+    <div className="mb-3">
+      {label && (
+        <label htmlFor={inputId} className="form-label">
+          <p>
+            {label}: {required && <span className="text-danger ms-1">*</span>}
+          </p>
+        </label>
+      )}
 
-			<input
-				type={type}
-				id={inputId}
-				name={name}
-				className={inputClasses}
-				placeholder={placeholder}
-				value={value || ""}
-				onChange={onChange}
-				onBlur={onBlur}
-				required={required}
-				disabled={disabled}
-				readOnly={readOnly}
-				aria-describedby={
-					errorMessage
-						? `${inputId}-error`
-						: helpText
-						? `${inputId}-help`
-						: undefined
-				}
-				aria-invalid={hasError ? "true" : "false"}
-				{...rest}
-			/>
+      <input
+        type={type}
+        id={inputId}
+        name={name}
+        className={inputClasses}
+        placeholder={placeholder}
+        value={value || ''}
+        onChange={onChange}
+        onBlur={onBlur}
+        required={required}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-describedby={
+          errorMessage
+            ? `${inputId}-error`
+            : helpText
+              ? `${inputId}-help`
+              : undefined
+        }
+        aria-invalid={hasError ? 'true' : 'false'}
+        {...rest}
+      />
 
-			{errorMessage && (
-				<div id={`${inputId}-error`} className='small' role='alert'>
-					<p>- {errorMessage}</p>
-				</div>
-			)}
+      {errorMessage && (
+        <div id={`${inputId}-error`} className="small" role="alert">
+          <p>- {errorMessage}</p>
+        </div>
+      )}
 
-			{helpText && !errorMessage && (
-				<div id={`${inputId}-help`} className='small'>
-					<p>{helpText}</p>
-				</div>
-			)}
-		</div>
-	);
+      {helpText && !errorMessage && (
+        <div id={`${inputId}-help`} className="small">
+          <p>{helpText}</p>
+        </div>
+      )}
+    </div>
+  );
 }

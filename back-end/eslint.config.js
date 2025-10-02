@@ -6,27 +6,12 @@ module.exports = [
 		languageOptions: {
 			ecmaVersion: 2022,
 			sourceType: "commonjs",
-			globals: {
-				// Node.js globals
-				global: "readonly",
-				process: "readonly",
-				Buffer: "readonly",
-				__dirname: "readonly",
-				__filename: "readonly",
-				module: "readonly",
-				require: "readonly",
-				exports: "readonly",
-				console: "readonly",
-				setTimeout: "readonly",
-				clearTimeout: "readonly",
-				setInterval: "readonly",
-				clearInterval: "readonly",
-				setImmediate: "readonly",
-				clearImmediate: "readonly",
-			},
+		},
+		env: {
+			node: true, // enables all Node.js globals
+			es2022: true, // enables ES2022 globals like `globalThis`
 		},
 		rules: {
-			// Error Prevention
 			"no-console": "off", // Allow console.log in Node.js
 			"no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 			"no-undef": "error",
@@ -42,7 +27,6 @@ module.exports = [
 			"no-return-assign": "error",
 			"no-sequences": "error",
 			"no-throw-literal": "error",
-			"prefer-const": "error",
 			"no-var": "error",
 
 			// Style (handled by Prettier, but some logical ones)
@@ -50,13 +34,7 @@ module.exports = [
 			"no-trailing-spaces": "error",
 			"eol-last": "error",
 		},
-		ignores: [
-			"node_modules/**",
-			"dist/**",
-			"build/**",
-			"coverage/**",
-			"*.min.js",
-		],
+		ignores: ["node_modules/**", "build/**", "coverage/**", "*.min.js"],
 	},
 	{
 		// Test files configuration

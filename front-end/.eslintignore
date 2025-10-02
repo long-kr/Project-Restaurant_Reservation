@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Production build
+build/
+dist/
+
+# Environment files
+.env*
+
+# Logs
+*.log
+
+# Package files
+package-lock.json
+yarn.lock
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Public files (no need to lint)
+public/
+
