@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Button } from "../components/ui";
 import { formatAsDate } from "../utils/date-time";
 
 /**
@@ -29,27 +30,31 @@ function ReservationView({ reservation, cancelHandler }) {
 
 			<div className='card-footer bg-dark'>
 				<div className='d-flex justify-content-around'>
-					<a
+					<Link
 						className='btn border-right'
-						href={`/reservations/${reservation.reservation_id}/edit`}
+						to={`/reservations/${reservation.reservation_id}/edit`}
 					>
 						&nbsp;&nbsp; Edit &nbsp;&nbsp;
-					</a>
+					</Link>
 
-					<button
+					<Button
 						data-reservation-id-cancel={reservation.reservation_id}
-						className='btn'
+						variant='dark'
 						onClick={() => cancelHandler(reservation.reservation_id)}
 					>
 						Cancel
-					</button>
+					</Button>
 
-					{reservation.status === "booked" && (
+					{reservation.status === "booked" ? (
 						<Link
 							to={`/reservations/${reservation.reservation_id}/seat`}
 							className='btn border-left'
 						>
 							&nbsp;&nbsp; Seat &nbsp;&nbsp;
+						</Link>
+					) : (
+						<Link className='btn border-left'>
+							&nbsp;&nbsp; Seated &nbsp;&nbsp;
 						</Link>
 					)}
 				</div>

@@ -14,9 +14,10 @@ body {
 	background-image: url("../../assets/pic2cups.jpg");
 	background-attachment: fixed;
 	background-size: cover;
-	background-color: black;
+	background-color: rgba(0, 0, 0, 0.2);
 	overflow-y: scroll;
 	overflow-x: hidden;
+	background-blend-mode: darken;
 }
 
 h1 {

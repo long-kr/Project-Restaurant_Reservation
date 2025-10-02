@@ -92,13 +92,13 @@ export function Input({
 			/>
 
 			{errorMessage && (
-				<div id={`${inputId}-error`} className='invalid-feedback' role='alert'>
-					<p>{errorMessage}</p>
+				<div id={`${inputId}-error`} className='small' role='alert'>
+					<p>- {errorMessage}</p>
 				</div>
 			)}
 
 			{helpText && !errorMessage && (
-				<div id={`${inputId}-help`} className='form-text'>
+				<div id={`${inputId}-help`} className='small'>
 					<p>{helpText}</p>
 				</div>
 			)}

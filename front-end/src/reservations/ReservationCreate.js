@@ -63,6 +63,7 @@ function ReservationCreate() {
 							placeholder='Customer first name'
 							helpText='Minimum 2 characters'
 							{...getFieldProps("first_name")}
+							required
 						/>
 					</div>
 					<div className='col-md-6'>
@@ -72,6 +73,7 @@ function ReservationCreate() {
 							placeholder='Customer last name'
 							helpText='Minimum 2 characters'
 							{...getFieldProps("last_name")}
+							required
 						/>
 					</div>
 				</FormFieldGroup>
@@ -84,6 +86,7 @@ function ReservationCreate() {
 							placeholder='xxx-xxx-xxxx'
 							helpText='Format: xxx-xxx-xxxx'
 							{...getFieldProps("mobile_number")}
+							required
 						/>
 					</div>
 					<div className='col-md-6'>
@@ -95,6 +98,7 @@ function ReservationCreate() {
 							max='20'
 							helpText='Between 1 and 20 people'
 							{...getFieldProps("people")}
+							required
 						/>
 					</div>
 				</FormFieldGroup>
@@ -107,6 +111,7 @@ function ReservationCreate() {
 							min={today()}
 							helpText='Cannot be a past date or Tuesday'
 							{...getFieldProps("reservation_date")}
+							required
 						/>
 					</div>
 					<div className='col-md-6'>
@@ -115,6 +120,7 @@ function ReservationCreate() {
 							label='Reservation Time'
 							helpText='Between 10:30 AM and 9:30 PM'
 							{...getFieldProps("reservation_time")}
+							required
 						/>
 					</div>
 				</FormFieldGroup>

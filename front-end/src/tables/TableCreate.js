@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, FormActions, Input } from "../components";
 import { ErrorAlert } from "../components/layout";
+import { useFormValidation } from "../hooks/useFormValidation";
 import { useCreateTable } from "../hooks/useTables";
+import { tableRules } from "../utils/validations";
 
 const initialTable = {
 	table_name: "",
@@ -13,32 +15,32 @@ function TableCreate() {
 	const navigate = useNavigate();
 	const createTableMutation = useCreateTable();
 
-	const [table, setTable] = useState({ ...initialTable });
-	const [error, setError] = useState(null);
+	const [error, setError] = useState([]);
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-		table.capacity = parseInt(table.capacity);
+	const submitHandler = (values) => {
+		const tableData = {
+			...values,
+			capacity: parseInt(values.capacity),
+		};
 
 		createTableMutation.mutate(
-			{ table },
+			{ table: tableData },
 			{
 				onSuccess: () => {
 					navigate("/dashboard");
 				},
 				onError: (errors) => {
-					setError([errors]);
+					setError(errors);
 				},
 			}
 		);
 	};
 
-	const changeHandler = ({ target }) => {
-		setTable((prevTable) => ({
-			...prevTable,
-			[target.name]: target.value,
-		}));
-	};
+	const { getFieldProps, handleSubmit, isValid } = useFormValidation(
+		initialTable,
+		tableRules,
+		submitHandler
+	);
 
 	return (
 		<div>
@@ -46,18 +48,16 @@ function TableCreate() {
 
 			{error && error.map((err, i) => <ErrorAlert key={i} error={err} />)}
 
-			<Form onSubmit={submitHandler}>
+			<Form onSubmit={handleSubmit}>
 				<Input
 					type='text'
 					name='table_name'
 					label='Table Name'
 					placeholder="Table's name"
-					value={table.table_name}
-					onChange={changeHandler}
-					minLength={2}
 					required
 					helpText='Minimum 2 characters'
 					className='col-md-5 mb-3 pl-0'
+					{...getFieldProps("table_name")}
 				/>
 
 				<hr />
@@ -67,12 +67,10 @@ function TableCreate() {
 					name='capacity'
 					label='Capacity'
 					placeholder='Number of people'
-					value={table.capacity}
-					onChange={changeHandler}
-					min={1}
 					required
 					helpText='Minimum 1 person'
 					className='col-md-5 mb-3 pl-0'
+					{...getFieldProps("capacity")}
 				/>
 
 				<FormActions>
@@ -83,6 +81,7 @@ function TableCreate() {
 						variant='dark'
 						type='submit'
 						className='border-left'
+						disabled={!isValid}
 						loading={createTableMutation.isPending}
 					>
 						Submit

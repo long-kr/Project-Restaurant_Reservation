@@ -55,3 +55,14 @@ export const reservationRules = {
 		),
 	],
 };
+
+export const tableRules = {
+	table_name: [
+		validationRules.required("Table name is required"),
+		validationRules.minLength(2, "Table name must be at least 2 characters"),
+	],
+	capacity: [
+		validationRules.required("Capacity is required"),
+		validationRules.min(1, "Capacity must be at least 1 person"),
+	],
+};
