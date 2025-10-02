@@ -6,7 +6,9 @@ const { AppError } = require("./AppError");
  */
 const sendErrorDev = (err, res) => {
 	res.status(err.statusCode).json({
-		error: err.message,
+		error: err.errorCode || err.message,
+		message: err.message,
+		statusCode: err.statusCode,
 		stack: err.stack,
 	});
 };
@@ -18,14 +20,18 @@ const sendErrorProd = (err, res) => {
 	// Operational, trusted error: send message to client
 	if (err.isOperational) {
 		res.status(err.statusCode).json({
-			error: err.message,
+			error: err.errorCode || err.message,
+			message: err.message,
+			statusCode: err.statusCode,
 		});
 	} else {
 		// Programming or other unknown error: don't leak error details
 		logger.error("ERROR:", err);
 
 		res.status(500).json({
-			error: "Something went wrong!",
+			error: "INTERNAL_SERVER_ERROR",
+			message: "Something went wrong!",
+			statusCode: 500,
 		});
 	}
 };
@@ -35,7 +41,7 @@ const sendErrorProd = (err, res) => {
  */
 const handleCastErrorDB = (err) => {
 	const message = `Invalid ${err.path}: ${err.value}`;
-	return new AppError(message, 400);
+	return new AppError(message, 400, "BAD_REQUEST");
 };
 
 /**
@@ -44,7 +50,7 @@ const handleCastErrorDB = (err) => {
 const handleDuplicateFieldsDB = (err) => {
 	const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
 	const message = `Duplicate field value: ${value}. Please use another value!`;
-	return new AppError(message, 400);
+	return new AppError(message, 400, "CONFLICT");
 };
 
 /**
@@ -53,7 +59,7 @@ const handleDuplicateFieldsDB = (err) => {
 const handleValidationErrorDB = (err) => {
 	const errors = Object.values(err.errors).map((el) => el.message);
 	const message = `Invalid input data. ${errors.join(". ")}`;
-	return new AppError(message, 400);
+	return new AppError(message, 400, "VALIDATION_ERROR");
 };
 
 /**
