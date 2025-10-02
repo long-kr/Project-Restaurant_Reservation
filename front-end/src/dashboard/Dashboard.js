@@ -129,21 +129,19 @@ function Dashboard() {
 				<section className='row justify-content-between'>
 					<div className='col-lg-8'>
 						{reservations.length ? (
-							<div className='py-2'>
-								{reservations.map((reservation) => (
-									<ReservationView
-										key={reservation.reservation_id}
-										reservation={reservation}
-										cancelHandler={cancelReservationHandler}
-									/>
-								))}
-							</div>
+							reservations.map((reservation) => (
+								<ReservationView
+									key={reservation.reservation_id}
+									reservation={reservation}
+									cancelHandler={cancelReservationHandler}
+								/>
+							))
 						) : (
 							<Empty />
 						)}
 					</div>
 
-					<div className='col-lg-4 order-first order-lg-2  mt-3'>
+					<div className='col-lg-4 order-first order-lg-2'>
 						{!!tables.length ? (
 							tables.map((table) => (
 								<TableView

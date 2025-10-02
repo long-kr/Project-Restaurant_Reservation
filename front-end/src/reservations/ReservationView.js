@@ -7,7 +7,7 @@ import { formatAsDate } from "../utils/date-time";
  */
 function ReservationView({ reservation, cancelHandler }) {
 	return (
-		<div className='my-2 mx-0'>
+		<div className='mb-2 mx-0'>
 			<div className='card bg-dark'>
 				<div className='card-header'>
 					<p className='m-0'>
