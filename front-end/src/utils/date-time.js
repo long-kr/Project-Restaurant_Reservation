@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from 'moment';
 const dateFormat = /\d\d\d\d-\d\d-\d\d/;
 const timeFormat = /\d\d:\d\d/;
 
@@ -14,9 +14,9 @@ const timeFormat = /\d\d:\d\d/;
  *  the specified Date formatted as YYYY-MM-DD
  */
 function asDateString(date) {
-	return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
-		.toString(10)
-		.padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
+  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
+    .toString(10)
+    .padStart(2, '0')}-${date.getDate().toString(10).padStart(2, '0')}`;
 }
 
 /**
@@ -27,7 +27,7 @@ function asDateString(date) {
  *  the specified date string formatted as YYYY-MM-DD
  */
 export function formatAsDate(dateString) {
-	return dateString.match(dateFormat)[0];
+  return dateString.match(dateFormat)[0];
 }
 
 /**
@@ -38,7 +38,7 @@ export function formatAsDate(dateString) {
  *  the specified time string formatted as YHH:MM.
  */
 export function formatAsTime(timeString) {
-	return timeString.match(timeFormat)[0];
+  return timeString.match(timeFormat)[0];
 }
 
 /**
@@ -47,7 +47,7 @@ export function formatAsTime(timeString) {
  *  the today's date formatted as YYYY-MM-DD
  */
 export function today() {
-	return moment().format("YYYY-MM-DD");
+  return moment().format('YYYY-MM-DD');
 }
 
 /**
@@ -58,12 +58,12 @@ export function today() {
  *  the date one day prior to currentDate, formatted as YYYY-MM-DD
  */
 export function previous(currentDate) {
-	let [year, month, day] = currentDate.split("-");
-	month -= 1;
-	const date = new Date(year, month, day);
-	date.setMonth(date.getMonth());
-	date.setDate(date.getDate() - 1);
-	return asDateString(date);
+  const [year, monthStr, day] = currentDate.split('-');
+  const month = parseInt(monthStr, 10) - 1;
+  const date = new Date(year, month, day);
+  date.setMonth(date.getMonth());
+  date.setDate(date.getDate() - 1);
+  return asDateString(date);
 }
 
 /**
@@ -74,12 +74,12 @@ export function previous(currentDate) {
  *  the date one day after currentDate, formatted as YYYY-MM-DD
  */
 export function next(currentDate) {
-	let [year, month, day] = currentDate.split("-");
-	month -= 1;
-	const date = new Date(year, month, day);
-	date.setMonth(date.getMonth());
-	date.setDate(date.getDate() + 1);
-	return asDateString(date);
+  const [year, monthStr, day] = currentDate.split('-');
+  const month = parseInt(monthStr, 10) - 1;
+  const date = new Date(year, month, day);
+  date.setMonth(date.getMonth());
+  date.setDate(date.getDate() + 1);
+  return asDateString(date);
 }
 
 /**
@@ -90,12 +90,12 @@ export function next(currentDate) {
  *  the week day of the specified date
  */
 export function getWeekDay(input) {
-	const dateArray = input.split("-");
-	const year = dateArray[0];
-	const month = parseInt(dateArray[1], 10) - 1;
-	const date = dateArray[2];
-	const newDate = new Date(year, month, date);
-	return newDate.getDay();
+  const dateArray = input.split('-');
+  const year = dateArray[0];
+  const month = parseInt(dateArray[1], 10) - 1;
+  const date = dateArray[2];
+  const newDate = new Date(year, month, date);
+  return newDate.getDay();
 }
 
 /**
@@ -106,13 +106,13 @@ export function getWeekDay(input) {
  *  true if the reservation time is valid, false otherwise
  */
 export function isReservationTimeValid(timeInput) {
-	const openTime = new Date().setHours(10, 30, 0);
-	const closedTime = new Date().setHours(21, 30, 0);
-	const hourInput = Number(timeInput.split(":")[0]);
-	const minusInput = Number(timeInput.split(":")[1]);
-	const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+  const openTime = new Date().setHours(10, 30, 0);
+  const closedTime = new Date().setHours(21, 30, 0);
+  const hourInput = Number(timeInput.split(':')[0]);
+  const minusInput = Number(timeInput.split(':')[1]);
+  const reserveTime = new Date().setHours(hourInput, minusInput, 0);
 
-	return reserveTime >= openTime && reserveTime <= closedTime;
+  return reserveTime >= openTime && reserveTime <= closedTime;
 }
 
 /**
@@ -125,12 +125,12 @@ export function isReservationTimeValid(timeInput) {
  *  true if the reservation time is not past the current time, false otherwise
  */
 export function isNotPastTime(timeInput, dateInput) {
-	if (dateInput !== today()) return true;
+  if (dateInput !== today()) return true;
 
-	const hourInput = Number(timeInput.split(":")[0]);
-	const minusInput = Number(timeInput.split(":")[1]);
-	const reserveTime = new Date().setHours(hourInput, minusInput, 0);
-	const timeNow = new Date().getTime();
+  const hourInput = Number(timeInput.split(':')[0]);
+  const minusInput = Number(timeInput.split(':')[1]);
+  const reserveTime = new Date().setHours(hourInput, minusInput, 0);
+  const timeNow = new Date().getTime();
 
-	return timeNow <= reserveTime;
+  return timeNow <= reserveTime;
 }
