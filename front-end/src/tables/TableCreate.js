@@ -15,7 +15,7 @@ function TableCreate() {
   const navigate = useNavigate();
   const createTableMutation = useCreateTable();
 
-  const [error, setError] = useState([]);
+  const [errorMsg, setErrorMsg] = useState([]);
 
   const submitHandler = values => {
     const tableData = {
@@ -30,13 +30,15 @@ function TableCreate() {
           navigate('/dashboard');
         },
         onError: errors => {
-          setError(errors);
+          const validation = errors?.cause?.validation || [];
+          const validationErrors = validation.map(val => val?.message);
+          setErrorMsg(validationErrors);
         },
       }
     );
   };
 
-  const { getFieldProps, handleSubmit, isValid } = useFormValidation(
+  const { getFieldProps, handleSubmit } = useFormValidation(
     initialTable,
     tableRules,
     submitHandler
@@ -46,7 +48,9 @@ function TableCreate() {
     <div>
       <h4 className="h3 text-center mb-0">Create New Table</h4>
 
-      {error && error.map((err, i) => <ErrorAlert key={i} error={err} />)}
+      {errorMsg.map((err, i) => (
+        <ErrorAlert key={i} error={err} />
+      ))}
 
       <Form onSubmit={handleSubmit} className="col-md-6 mb-3 pl-0">
         <Input
@@ -77,7 +81,6 @@ function TableCreate() {
             variant="dark"
             type="submit"
             className="border-left"
-            disabled={!isValid}
             loading={createTableMutation.isPending}
           >
             Submit

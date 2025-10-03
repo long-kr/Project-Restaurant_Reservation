@@ -43,7 +43,16 @@
     "test:8:frontend": "npm run test:8 --prefix ./front-end",
     "test:8:backend": "npm run test:8 --prefix ./back-end",
     "test:e2e": "npm run test:e2e --prefix ./front-end",
-    "test:frontend:watch": "npm test --prefix ./front-end"
+    "test:frontend:watch": "npm test --prefix ./front-end",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "npm run lint --prefix ./front-end",
+    "lint:backend": "npm run lint --prefix ./back-end",
+    "lint:fix": "npm run lint:fix --prefix ./front-end && npm run lint:fix --prefix ./back-end",
+    "format": "npm run format --prefix ./front-end && npm run format --prefix ./back-end",
+    "format:check": "npm run format:check --prefix ./front-end && npm run format:check --prefix ./back-end",
+    "format:lint": "npm run format:lint --prefix ./front-end && npm run format:lint --prefix ./back-end",
+    "code:check": "npm run code:check --prefix ./front-end && npm run code:check --prefix ./back-end",
+    "code:fix": "npm run code:fix --prefix ./front-end && npm run code:fix --prefix ./back-end"
   },
   "keywords": [],
   "author": "Thinkful, Inc.",

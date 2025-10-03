@@ -17,7 +17,7 @@ module.exports = {
 	arrowParens: "always",
 
 	// End of line
-	endOfLine: "lf",
+	endOfLine: "crlf",
 
 	// Quotes in objects
 	quoteProps: "as-needed",

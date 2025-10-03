@@ -12,10 +12,6 @@ function ReservationView({ reservation, cancelHandler }) {
         <p className="card-text m-0">
           GUEST: {reservation.first_name} {reservation.last_name}
         </p>
-
-        <p className="card-text m-0">
-          STATUS: {reservation.status.toUpperCase()}
-        </p>
       </div>
 
       <div
@@ -29,6 +25,7 @@ function ReservationView({ reservation, cancelHandler }) {
         </div>
 
         <div>
+          <p>Status: {reservation.status}</p>
           <p>Date: {formatAsDate(reservation.reservation_date)}</p>
           <p>Time: {reservation.reservation_time}</p>
         </div>

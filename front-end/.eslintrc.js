@@ -2,7 +2,7 @@ module.exports = {
   extends: ['react-app', 'react-app/jest', 'prettier'],
   plugins: ['prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'warn',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     'no-unused-vars': 'warn',

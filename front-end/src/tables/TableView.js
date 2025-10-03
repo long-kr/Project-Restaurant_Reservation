@@ -7,18 +7,25 @@ function TableView({ table, finishButtonHandler, deleteTableHandler }) {
         <p style={{ fontFamily: 'Times New Roman' }} className="card-text m-0">
           TABLE: {table.table_name}
         </p>
-
-        <p className="card-text m-0" data-table-id-status={`${table.table_id}`}>
-          STATUS: {(table.reservation_id ? 'Occupied' : 'Free').toUpperCase()}
-        </p>
       </div>
 
       <div
         style={{ backgroundColor: 'rgba(71, 71, 71, 0.8)' }}
-        className="card-body p-2"
+        className="card-body p-2 d-flex justify-content-between"
       >
-        <p className="card-text">Capacity: {table.capacity}</p>
-        <p className="card-text">Reservation ID: {table.reservation_id}</p>
+        <div>
+          <p className="card-text">Capacity: {table.capacity}</p>
+          <p className="card-text">Reservation ID: {table.reservation_id}</p>
+        </div>
+
+        <div>
+          <p
+            className="card-text m-0"
+            data-table-id-status={`${table.table_id}`}
+          >
+            Status: {table.reservation_id ? 'Occupied' : 'Free'}
+          </p>
+        </div>
       </div>
 
       <div className="d-flex justify-content-between card-footer bg-dark p-1">

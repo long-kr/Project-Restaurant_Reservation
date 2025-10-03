@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ErrorAlert } from '../components/layout';
 import {
   Button,
   Form,
@@ -24,6 +25,7 @@ const initialReservation = {
 function ReservationCreate() {
   const navigate = useNavigate();
   const createReservationMutation = useCreateReservation();
+  const [errorMsg, setErrorMsg] = useState([]);
 
   const onSubmit = values => {
     const reservationData = {
@@ -37,14 +39,18 @@ function ReservationCreate() {
         onSuccess: () => {
           navigate(`/dashboard?date=${values.reservation_date}`);
         },
-        onError: error => {
-          console.error('Reservation creation failed:', error);
+        onError: errors => {
+          if (errors.name === 'VALIDATION_ERROR') {
+            const validation = errors?.cause?.validation || [];
+            const validationErrors = validation.map(val => val?.message);
+            setErrorMsg(validationErrors);
+          }
         },
       }
     );
   };
 
-  const { getFieldProps, handleSubmit, isValid } = useFormValidation(
+  const { getFieldProps, handleSubmit } = useFormValidation(
     initialReservation,
     reservationRules,
     onSubmit
@@ -53,6 +59,10 @@ function ReservationCreate() {
   return (
     <div>
       <h4 className="h3 text-center mb-0">Create New Reservation</h4>
+
+      {errorMsg.map((err, i) => (
+        <ErrorAlert key={i} error={err} />
+      ))}
 
       <Form onSubmit={handleSubmit}>
         <FormFieldGroup className="row">
@@ -134,7 +144,6 @@ function ReservationCreate() {
             variant="dark"
             type="submit"
             loading={createReservationMutation.isPending}
-            disabled={!isValid}
             className="border-left"
           >
             Submit

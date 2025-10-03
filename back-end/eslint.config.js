@@ -6,10 +6,24 @@ module.exports = [
 		languageOptions: {
 			ecmaVersion: 2022,
 			sourceType: "commonjs",
-		},
-		env: {
-			node: true, // enables all Node.js globals
-			es2022: true, // enables ES2022 globals like `globalThis`
+			globals: {
+				// Node.js globals
+				global: "readonly",
+				process: "readonly",
+				Buffer: "readonly",
+				__dirname: "readonly",
+				__filename: "readonly",
+				module: "readonly",
+				require: "readonly",
+				exports: "readonly",
+				console: "readonly",
+				setTimeout: "readonly",
+				clearTimeout: "readonly",
+				setInterval: "readonly",
+				clearInterval: "readonly",
+				setImmediate: "readonly",
+				clearImmediate: "readonly",
+			},
 		},
 		rules: {
 			"no-console": "off", // Allow console.log in Node.js
