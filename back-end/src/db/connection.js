@@ -5,9 +5,7 @@ const knex = require("knex");
 let instance;
 
 function getKnexInstance() {
-	if (!instance) {
-		instance = knex(config);
-	}
+	if (!instance) instance = knex(config);
 	return instance;
 }
 

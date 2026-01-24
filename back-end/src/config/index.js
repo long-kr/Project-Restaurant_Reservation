@@ -45,7 +45,16 @@ const config = {
 	// CORS Configuration
 	cors: {
 		origin: process.env.CORS_ORIGIN || "*",
-		credentials: true,
+		credentials: false,
+	},
+
+	// Rate Limiting Configuration
+	rateLimit: {
+		windowMs:process.env.RATE_LIMIT_WINDOW_MS ? parseInt(process.env.RATE_LIMIT_WINDOW_MS) :  (1 * 60 * 1000), 
+		max: process.env.RATE_LIMIT_MAX_REQUESTS ?  parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) :  60 ,
+		message: "Too many requests from this IP, please try again later.",
+		standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+		legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 	},
 };
 

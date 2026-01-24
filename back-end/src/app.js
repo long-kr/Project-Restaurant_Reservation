@@ -1,36 +1,30 @@
 const express = require("express");
-
-const reservationsRouter = require("./reservations/reservations.router");
-const tablesRouter = require("./tables/tables.router");
+const rateLimit = require("express-rate-limit");
 
 const cors = require("cors");
 const { httpLogger } = require("./config/logger");
 const errorHandler = require("./errors/errorHandler");
 const notFound = require("./errors/notFound");
 const config = require("./config");
+const limiter = rateLimit(config.rateLimit);
+
+const reservationsRouter = require("./reservations/reservations.router");
+const tablesRouter = require("./tables/tables.router");
+const healthsRouter = require("./healths/healths.router");
 
 const app = express();
+
+app.use(cors(config.cors));
+app.options("*", cors(config.cors));
 
 // Security and parsing middleware
 app.use(cors(config.cors));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-
-// Logging middleware
+app.use(limiter);
 app.use(httpLogger);
 
-// Health check endpoint
-app.get("/health", (req, res) => {
-	res.status(200).json({
-		name: config.app.name,
-		status: "OK",
-		timestamp: new Date().toISOString(),
-		uptime: process.uptime(),
-		environment: config.server.env,
-		version: config.app.version,
-	});
-});
-
+app.use("/health", healthsRouter);
 app.use("/reservations", reservationsRouter);
 app.use("/tables", tablesRouter);
 
