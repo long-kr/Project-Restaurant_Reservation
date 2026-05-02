@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    container_name: restaurant-reservation-app
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+    expose:
+      - "5001"
+    networks:
+      - shared_proxy
+    restart: unless-stopped
+
+networks:
+  shared_proxy:
+    external: true
