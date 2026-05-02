@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy on EC2
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             set -e
             mkdir -p ${{ secrets.APP_DIR }}
             cd ${{ secrets.APP_DIR }}
@@ -35,6 +35,8 @@ jobs:
             git reset --hard origin/main
 
             cd back-end
+
+            printf "%s" '${{ secrets.ENV_FILE }}' > .env
 
             docker compose down
             docker compose up -d --build
