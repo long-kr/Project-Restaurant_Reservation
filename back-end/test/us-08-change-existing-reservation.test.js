@@ -16,7 +16,7 @@ describe("US-08 - Change an existing reservation", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
-		await knex.release();
+		await knex.destroy();
 	});
 
 	describe("PUT /reservations/:reservation_id", () => {

@@ -16,7 +16,7 @@ describe("US-03 - Create reservations eligible timeframe", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
-		await knex.release();
+		await knex.destroy();
 	});
 
 	describe("POST /reservations", () => {

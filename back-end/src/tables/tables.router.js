@@ -10,13 +10,13 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
 router
 	.route("/:table_id([0-9]+)/seat")
 	.put(controller.update)
-	.delete(controller.delete)
+	.delete(controller.finish)
 	.all(methodNotAllowed);
 
 router
 	.route("/:table_id([0-9]+)")
 	.get(controller.read)
-	.delete(controller.destroyTable);
+	.delete(controller.destroy);
 
 router
 	.route("/")

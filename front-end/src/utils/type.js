@@ -15,4 +15,4 @@
  * @property {String} table_name
  */
 
-module.exports = {}
+module.exports = {};

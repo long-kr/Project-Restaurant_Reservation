@@ -16,7 +16,7 @@ describe("US-04 - Seat reservation", () => {
 
 	afterAll(async () => {
 		await knex.migrate.rollback(undefined, true);
-		await knex.release();
+		await knex.destroy();
 	});
 
 	describe("Create and list tables", () => {

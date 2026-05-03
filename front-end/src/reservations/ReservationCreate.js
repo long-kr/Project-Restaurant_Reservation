@@ -1,116 +1,157 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
-import { createReservation } from "../utils/api";
-import { today } from "../utils/date-time";
-import SubmitForm from "./SubmitForm";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ErrorAlert } from '../components/layout';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormFieldGroup,
+  Input,
+} from '../components/ui';
+import { useFormValidation } from '../hooks/useFormValidation';
+import { useCreateReservation } from '../hooks/useReservations';
+import { today } from '../utils/date-time';
+import { reservationRules } from '../utils/validations';
 
 const initialReservation = {
-	first_name: "",
-	last_name: "",
-	mobile_number: "",
-	people: "",
-	reservation_date: "",
-	reservation_time: "",
-};
-
-function getWeekDay(input) {
-	const dateArray = input.split("-");
-	const year = dateArray[0];
-	const month = parseInt(dateArray[1], 10) - 1;
-	const date = dateArray[2];
-	const newDate = new Date(year, month, date);
-
-	return newDate.getDay();
-}
-
-const timeHandler = (dateInput, timeInput, setError) => {
-	const minDate = today();
-	const weekDay = getWeekDay(dateInput);
-	// Convert time into value
-	const openTime = new Date().setHours(10, 30, 0);
-	const closedTime = new Date().setHours(21, 30, 0);
-	const hourInput = Number(timeInput.split(":")[0]);
-	const minusInput = Number(timeInput.split(":")[1]);
-	const reserveTime = new Date().setHours(hourInput, minusInput, 0);
-	const timeNow = new Date().getTime();
-	const errors = [];
-
-	if (dateInput < minDate) {
-		errors.push({
-			message: `reservation_date cannot be a past day.`,
-		});
-	}
-
-	if (weekDay === 2) {
-		errors.push({
-			message: `reservation_date cannot be Tuesday.`,
-		});
-	}
-
-	if (reserveTime < openTime || reserveTime > closedTime) {
-		errors.push({
-			message: `Reservation time is between 10h30 a.m and 9h30 p.m`,
-		});
-	}
-
-	if (dateInput === minDate && timeNow > reserveTime) {
-		errors.push({
-			message: `It's passed reservation time!`,
-		});
-	}
-
-	if (errors.length) {
-		setError(errors);
-		return errors;
-	}
+  first_name: '',
+  last_name: '',
+  mobile_number: '',
+  people: '',
+  reservation_date: '',
+  reservation_time: '',
 };
 
 function ReservationCreate() {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const createReservationMutation = useCreateReservation();
+  const [errorMsg, setErrorMsg] = useState([]);
 
-	const [reservation, setReservation] = useState({ ...initialReservation });
-	const [error, setError] = useState([]);
+  const onSubmit = values => {
+    const reservationData = {
+      ...values,
+      people: parseInt(values.people),
+    };
 
-	const submitHandler = (e) => {
-		e.preventDefault();
-		const abortController = new AbortController();
-		reservation.people = parseInt(reservation.people);
+    createReservationMutation.mutate(
+      { reservation: reservationData },
+      {
+        onSuccess: () => {
+          navigate(`/dashboard?date=${values.reservation_date}`);
+        },
+        onError: errors => {
+          if (errors.name === 'VALIDATION_ERROR') {
+            const validation = errors?.cause?.validation || [];
+            const validationErrors = validation.map(val => val?.message);
+            setErrorMsg(validationErrors);
+          }
+        },
+      }
+    );
+  };
 
-		const closedDatesCheck = timeHandler(
-			reservation.reservation_date,
-			reservation.reservation_time,
-			setError
-		);
+  const { getFieldProps, handleSubmit } = useFormValidation(
+    initialReservation,
+    reservationRules,
+    onSubmit
+  );
 
-		if (closedDatesCheck) return;
+  return (
+    <div>
+      <h4 className="h3 text-center mb-0">Create New Reservation</h4>
 
-		createReservation(reservation, abortController.signal)
-			.then(() => {
-				navigate(`/dashboard?date=${reservation.reservation_date}`);
-			})
-			.catch((errors) => setError([errors]));
-	};
+      {errorMsg.map((err, i) => (
+        <ErrorAlert key={i} error={err} />
+      ))}
 
-	const changeHandler = ({ target }) => {
-		setReservation((preInfo) => ({
-			...preInfo,
-			[target.name]: target.value,
-		}));
-	};
+      <Form onSubmit={handleSubmit}>
+        <FormFieldGroup className="row">
+          <div className="col-md-6">
+            <Input
+              type="text"
+              label="First Name"
+              placeholder="Customer first name"
+              helpText="Minimum 2 characters"
+              {...getFieldProps('first_name')}
+              required
+            />
+          </div>
+          <div className="col-md-6">
+            <Input
+              type="text"
+              label="Last Name"
+              placeholder="Customer last name"
+              helpText="Minimum 2 characters"
+              {...getFieldProps('last_name')}
+              required
+            />
+          </div>
+        </FormFieldGroup>
 
-	return (
-		<div>
-			<h4 className='h3 text-center'>Create New Reservation</h4>
-			{error && error.map((err, i) => <ErrorAlert key={i} error={err} />)}
+        <FormFieldGroup className="row">
+          <div className="col-md-6">
+            <Input
+              type="tel"
+              label="Mobile Number"
+              placeholder="xxx-xxx-xxxx"
+              helpText="Format: xxx-xxx-xxxx"
+              {...getFieldProps('mobile_number')}
+              required
+            />
+          </div>
+          <div className="col-md-6">
+            <Input
+              type="number"
+              label="Number of Guests"
+              placeholder="How many guests?"
+              min="1"
+              max="20"
+              helpText="Between 1 and 20 people"
+              {...getFieldProps('people')}
+              required
+            />
+          </div>
+        </FormFieldGroup>
 
-			<SubmitForm
-				reservation={reservation}
-				submitHandler={submitHandler}
-				changeHandler={changeHandler}
-			/>
-		</div>
-	);
+        <FormFieldGroup className="row">
+          <div className="col-md-6">
+            <Input
+              type="date"
+              label="Reservation Date"
+              min={today()}
+              helpText="Cannot be a past date or Tuesday"
+              {...getFieldProps('reservation_date')}
+              required
+            />
+          </div>
+          <div className="col-md-6">
+            <Input
+              type="time"
+              label="Reservation Time"
+              helpText="Between 10:30 AM and 9:30 PM"
+              {...getFieldProps('reservation_time')}
+              required
+            />
+          </div>
+        </FormFieldGroup>
+
+        <FormActions>
+          <Button variant="dark" onClick={() => navigate(-1)} type="button">
+            Cancel
+          </Button>
+
+          <Button
+            variant="dark"
+            type="submit"
+            loading={createReservationMutation.isPending}
+            className="border-left"
+          >
+            Submit
+          </Button>
+        </FormActions>
+      </Form>
+    </div>
+  );
 }
 
 export default ReservationCreate;

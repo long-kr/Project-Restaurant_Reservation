@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Empty } from "../components/Empty";
-import { Button } from "../components/ui/Button";
-import ReservationView from "../reservations/ReservationView";
-import TableView from "../tables/TableView";
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Button, Empty, Loading } from '../components/ui';
+
 import {
-	deleteTable,
-	listReservations,
-	listTable,
-	setReservationStatus,
-	unSeatingTable,
-} from "../utils/api";
-import { next, previous, today } from "../utils/date-time";
+  useReservationsByDate,
+  useUpdateReservationStatus,
+} from '../hooks/useReservations';
+import { useDeleteTable, useTables, useUnseatTable } from '../hooks/useTables';
+import ReservationView from '../reservations/ReservationView';
+import TableView from '../tables/TableView';
+import { next, previous, today } from '../utils/date-time';
 
 /**
  * Defines the dashboard page.
@@ -20,146 +18,148 @@ import { next, previous, today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard() {
-	const todayDateString = today();
-	const history = useLocation();
+  const todayDateString = today();
+  const history = useLocation();
+  const queryDate = history.search
+    ? history.search.slice(6, 16)
+    : todayDateString;
 
-	const [reservations, setReservations] = useState([]);
-	const [tables, setTables] = useState([]);
-	const [date, setDate] = useState(() =>
-		history.search ? history.search.slice(6, 16) : todayDateString
-	);
+  const [date, setDate] = useState(() => queryDate);
 
-	const loadDashboard = useCallback(
-		async (signal) => {
-			try {
-				const reservations = await listReservations({ date }, signal);
-				const tables = await listTable();
+  // Use React Query hooks for data fetching
+  const {
+    data: reservations = [],
+    isLoading: reservationsLoading,
+    error: reservationsError,
+  } = useReservationsByDate(date);
 
-				setReservations(reservations);
-				setTables(tables);
-			} catch (error) {}
-		},
-		[date]
-	);
+  const {
+    data: tables = [],
+    isLoading: tablesLoading,
+    error: tablesError,
+  } = useTables();
 
-	const previousButtonHandler = () => {
-		setDate(previous(date.toString()));
-	};
+  // Mutation hooks
+  const updateReservationStatusMutation = useUpdateReservationStatus();
+  const unseatTableMutation = useUnseatTable();
+  const deleteTableMutation = useDeleteTable();
 
-	const todayButtonHandler = () => {
-		setDate(todayDateString);
-	};
+  const previousButtonHandler = () => {
+    setDate(previous(date.toString()));
+  };
 
-	const nextButtonHandler = () => {
-		setDate(next(date.toString()));
-	};
+  const todayButtonHandler = () => {
+    setDate(todayDateString);
+  };
 
-	function finishButtonHandler(table_id) {
-		if (
-			window.confirm(
-				"Is this table ready to seat new guests?\nThis cannot be undone."
-			)
-		) {
-			unSeatingTable(table_id)
-				.then(() => loadDashboard())
-				.catch();
-		}
-	}
+  const nextButtonHandler = () => {
+    setDate(next(date.toString()));
+  };
 
-	function deleteTableHandler(table_id) {
-		if (
-			window.confirm(
-				"Are you sure to delete this table?\nThis cannot be undone."
-			)
-		) {
-			deleteTable(table_id)
-				.then(() => loadDashboard())
-				.catch();
-		}
-	}
+  function finishButtonHandler(table_id) {
+    if (
+      window.confirm(
+        'Is this table ready to seat new guests?\nThis cannot be undone.'
+      )
+    ) {
+      unseatTableMutation.mutate({ tableId: table_id });
+    }
+  }
 
-	function cancelReservationHandler(reservation_id) {
-		if (
-			window.confirm(
-				"Do you want to cancel this reservation?\nThis cannot be undone."
-			)
-		) {
-			const abortController = new AbortController();
-			setReservationStatus(
-				reservation_id,
-				{ status: "cancelled" },
-				abortController.signal
-			)
-				.then(() => {
-					window.location.reload();
-				})
-				.catch();
-			return () => abortController.abort();
-		}
-	}
+  function deleteTableHandler(table_id) {
+    if (
+      window.confirm(
+        'Are you sure to delete this table?\nThis cannot be undone.'
+      )
+    ) {
+      deleteTableMutation.mutate({ tableId: table_id });
+    }
+  }
 
-	useEffect(() => {
-		const abortController = new AbortController();
-		loadDashboard(abortController.signal);
-		return () => {
-			abortController.abort();
-		};
-	}, [loadDashboard]);
+  function cancelReservationHandler(reservation_id) {
+    if (
+      window.confirm(
+        'Do you want to cancel this reservation?\nThis cannot be undone.'
+      )
+    ) {
+      updateReservationStatusMutation.mutate({
+        reservationId: reservation_id,
+        data: { status: 'cancelled' },
+      });
+    }
+  }
 
-	return (
-		<main>
-			<div className='d-flex justify-content-around'>
-				<h4 className='mb-0 h3 '>Date: {date}</h4>
-			</div>
+  // Loading and error states
+  const isLoading = reservationsLoading || tablesLoading;
+  const hasError = reservationsError || tablesError;
 
-			<div role='group' className='d-flex py-2 btn-group '>
-				<Button className='btn-dark' onClick={previousButtonHandler}>
-					Previous day
-				</Button>
+  if (hasError) {
+    return (
+      <main>
+        <div className="alert alert-danger">
+          Error loading dashboard data. Please try again.
+        </div>
+      </main>
+    );
+  }
 
-				<Button className='btn-dark' onClick={todayButtonHandler}>
-					Today
-				</Button>
+  return (
+    <main>
+      <div className="d-flex justify-content-around">
+        <h4 className="mb-0 h3 ">Date: {date}</h4>
+      </div>
 
-				<Button className='btn-dark' onClick={nextButtonHandler}>
-					Next day
-				</Button>
-			</div>
+      <div role="group" className="d-flex py-2 btn-group ">
+        <Button className="btn-dark" onClick={previousButtonHandler}>
+          Previous day
+        </Button>
 
-			<section className='row justify-content-between'>
-				<div className='col-lg-8'>
-					{reservations.length ? (
-						<div className='py-2'>
-							{reservations.map((reservation) => (
-								<ReservationView
-									key={reservation.reservation_id}
-									reservation={reservation}
-									cancelHandler={cancelReservationHandler}
-								/>
-							))}
-						</div>
-					) : (
-						<Empty />
-					)}
-				</div>
+        <Button className="btn-dark" onClick={todayButtonHandler}>
+          Today
+        </Button>
 
-				<div className='col-lg-4 order-first order-lg-2  mt-3'>
-					{!!tables.length ? (
-						tables.map((table) => (
-							<TableView
-								key={table.table_id}
-								table={table}
-								finishButtonHandler={finishButtonHandler}
-								deleteTableHandler={deleteTableHandler}
-							/>
-						))
-					) : (
-						<Empty />
-					)}
-				</div>
-			</section>
-		</main>
-	);
+        <Button className="btn-dark" onClick={nextButtonHandler}>
+          Next day
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <section className="row justify-content-between">
+          <div className="col-lg-8">
+            {reservations.length ? (
+              reservations.map(reservation => (
+                <ReservationView
+                  key={reservation.reservation_id}
+                  reservation={reservation}
+                  cancelHandler={cancelReservationHandler}
+                />
+              ))
+            ) : (
+              <Empty />
+            )}
+          </div>
+
+          <div className="col-lg-4 order-first order-lg-2 row">
+            {!!tables.length ? (
+              tables.map(table => (
+                <div className="col-lg-12 col-sm-6" key={table.table_id}>
+                  <TableView
+                    table={table}
+                    finishButtonHandler={finishButtonHandler}
+                    deleteTableHandler={deleteTableHandler}
+                  />
+                </div>
+              ))
+            ) : (
+              <Empty />
+            )}
+          </div>
+        </section>
+      )}
+    </main>
+  );
 }
 
 export default Dashboard;
