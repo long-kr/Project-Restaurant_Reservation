@@ -1,18 +1,8 @@
-const puppeteer = require("puppeteer");
-
 const fs = require("fs");
+const { getBrowser, onPageConsole } = require("./utils");
 const fsPromises = fs.promises;
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
-
-const onPageConsole = (msg) => {
-	if (msg.type() === "error") {
-		return Promise.all(msg.args().map((event) => event.jsonValue())).then(
-			(eventJson) =>
-				console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
-		);
-	}
-};
 
 describe("US-07 - Search reservations - E2E", () => {
 	let page;
@@ -20,10 +10,10 @@ describe("US-07 - Search reservations - E2E", () => {
 
 	beforeAll(async () => {
 		await fsPromises.mkdir("./.screenshots", { recursive: true });
+		browser = await getBrowser();
 	});
 
 	beforeEach(async () => {
-		browser = await puppeteer.launch();
 		page = await browser.newPage();
 		page.on("console", onPageConsole);
 		await page.setViewport({ width: 1920, height: 1080 });
